@@ -1,7 +1,8 @@
 <?php
 
-namespace Envor\Datastore;
+namespace Envor\Datastore\Concerns;
 
+use Envor\Datastore\Models\Datastore;
 use Envor\Platform\Concerns\HasPlatformUuids;
 use Envor\Platform\Concerns\UsesPlatformConnection;
 
