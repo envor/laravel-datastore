@@ -104,6 +104,7 @@ abstract class Datastore
 
     public function create(): void
     {
+        $this->clearConfigs();
         $this->cacheOriginalDefaultConfig();
         $this->configureAdmin();
         $this->refreshConnection($this->adminName);
@@ -157,17 +158,17 @@ abstract class Datastore
         return true;
     }
 
-    protected function makeAdminName(string $name)
+    protected function makeAdminName(string $name) : string
     {
         return 'admin_'.$this->makeName($name);
     }
 
-    protected function makeName(string $name)
+    protected function makeName(string $name) : string
     {
         return $this->namePrefix.$name;
     }
 
-    protected function makeConfig()
+    protected function makeConfig() : array
     {
         $config = $this->adminConfig;
 
@@ -176,7 +177,7 @@ abstract class Datastore
         return $config;
     }
 
-    protected function configureDatabase()
+    protected function configureDatabase() : void
     {
         $connection = $this->name;
 
@@ -186,7 +187,7 @@ abstract class Datastore
         ]);
     }
 
-    public function configure()
+    public function configure() : void
     {
         $this->clearConfigs();
         $this->cacheOriginalDefaultConfig();
@@ -194,7 +195,7 @@ abstract class Datastore
         $this->refreshConnection($this->name);
     }
 
-    public function configureAdmin()
+    public function configureAdmin() : void
     {
         $connection = $this->adminName;
 

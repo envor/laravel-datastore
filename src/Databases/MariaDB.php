@@ -6,7 +6,7 @@ use Envor\Datastore\Datastore;
 
 class MariaDB extends Datastore
 {
-    protected function makeAdminConfig()
+    protected function makeAdminConfig() : mixed
     {
         return config('database.connections.mariadb');
     }

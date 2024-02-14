@@ -6,7 +6,7 @@ use Envor\Datastore\Datastore;
 
 class MySql extends Datastore
 {
-    protected function makeAdminConfig()
+    protected function makeAdminConfig() : mixed
     {
         return config('database.connections.mysql');
     }

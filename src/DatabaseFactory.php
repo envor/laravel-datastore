@@ -20,6 +20,10 @@ class DatabaseFactory
 
     protected static function forSqlite(string $name, $disk = 'local')
     {
+        if($name === ':memory:') {
+            return new Databases\SQLite($name);
+        }
+
         $disk = app(Factory::class)->disk($disk);
 
         $path = $disk->path($name);
