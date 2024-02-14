@@ -2,8 +2,13 @@
 
 namespace Envor\Datastore;
 
+use Envor\Platform\Concerns\HasPlatformUuids;
+use Envor\Platform\Concerns\UsesPlatformConnection;
+
 trait BelongsToDatastore
 {
+    use HasPlatformUuids;
+    use UsesPlatformConnection;
 
     public static function bootBelongsToDatastore()
     {
@@ -23,11 +28,11 @@ trait BelongsToDatastore
 
     public function configure()
     {
-        return $this->datastore->configure();
+        return $this->datastore?->configure();
     }
 
     public function use()
     {
-        return $this->datastore->use();
+        return $this->datastore?->use();
     }
 }
