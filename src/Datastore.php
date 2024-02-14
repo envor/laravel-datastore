@@ -24,23 +24,23 @@ abstract class Datastore
 
     protected string $namePrefix = 'datastore_';
 
-    protected abstract function makeAdminConfig();
-    
+    abstract protected function makeAdminConfig();
+
     public function __construct(string $name, string $disk = 'local')
     {
         $this->name = $this->makeName($name);
-        
+
         $this->config = $this->makeConfig();
-        
+
         $this->adminConfig = $this->makeAdminConfig();
-        
+
         $this->adminName = $this->makeAdminName($name);
     }
 
-    public function clearConfigs() : void
+    public function clearConfigs(): void
     {
-        $isDatastoreConfig = function($value, $key) {
-            return str()->startsWith($key, $this->namePrefix, true) || str()->startsWith($key, 'admin_'. $this->namePrefix, true);
+        $isDatastoreConfig = function ($value, $key) {
+            return str()->startsWith($key, $this->namePrefix, true) || str()->startsWith($key, 'admin_'.$this->namePrefix, true);
         };
 
         $datastoreConfigs = Arr::where(config('database.connections'), $isDatastoreConfig);
@@ -59,41 +59,41 @@ abstract class Datastore
         return $result;
     }
 
-    public function output(OutputInterface $output) : self
+    public function output(OutputInterface $output): self
     {
         $this->output = $output;
 
         return $this;
     }
 
-    public function migrationPath(string $path) : self
+    public function migrationPath(string $path): self
     {
         $this->migrationPath = $path;
 
         return $this;
     }
 
-    public function migrate() : void
+    public function migrate(): void
     {
         $this->configure();
         $this->callMigrateCommand();
         $this->cleanup();
     }
 
-    public function cleanup() : void
+    public function cleanup(): void
     {
         $this->restoreOriginalDefaultConfig();
         $this->refreshConnection(config('database.default'));
         $this->clearConfigs();
     }
 
-    protected function callMigrateCommand() : string
+    protected function callMigrateCommand(): string
     {
         $options = [
             '--force' => true,
         ];
 
-        if($this->migrationPath) {
+        if ($this->migrationPath) {
             $options['--path'] = $this->migrationPath;
         }
 
@@ -102,7 +102,7 @@ abstract class Datastore
         return Artisan::output();
     }
 
-    public function create() : void
+    public function create(): void
     {
         $this->cacheOriginalDefaultConfig();
         $this->configureAdmin();
@@ -112,23 +112,23 @@ abstract class Datastore
         $this->cleanup();
     }
 
-    protected function purgeAdmin() : void
+    protected function purgeAdmin(): void
     {
         DB::purge($this->adminName);
     }
 
-    protected function createDatabase() : void
+    protected function createDatabase(): void
     {
         Schema::connection($this->adminName)->createDatabaseIfNotExists($this->name);
     }
 
-    protected function refreshConnection($connectionName) : void
+    protected function refreshConnection($connectionName): void
     {
         DB::purge($connectionName);
         DB::reconnect($connectionName);
     }
 
-    protected function cacheOriginalDefaultConfig() : void
+    protected function cacheOriginalDefaultConfig(): void
     {
         $key = config('database.default');
         $config = config("database.connections.{$key}");
@@ -139,11 +139,11 @@ abstract class Datastore
         ]);
     }
 
-    protected function restoreOriginalDefaultConfig() : bool
+    protected function restoreOriginalDefaultConfig(): bool
     {
         $original = cache()->get('original_default_database');
 
-        if(!$original) {
+        if (! $original) {
             return false;
         }
 

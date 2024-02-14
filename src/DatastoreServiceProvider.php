@@ -2,9 +2,9 @@
 
 namespace Envor\Datastore;
 
+use Envor\Datastore\Commands\DatastoreCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Envor\Datastore\Commands\DatastoreCommand;
 
 class DatastoreServiceProvider extends PackageServiceProvider
 {

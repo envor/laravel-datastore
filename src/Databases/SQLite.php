@@ -6,7 +6,6 @@ use Envor\Datastore\Datastore;
 
 class SQLite extends Datastore
 {
-
     protected function makeAdminConfig()
     {
         return config('database.connections.sqlite');
@@ -14,8 +13,8 @@ class SQLite extends Datastore
 
     protected function makeName(string $name)
     {
-        return implode(DIRECTORY_SEPARATOR,[
-            (string) str()->of(dirname($name))->finish(DIRECTORY_SEPARATOR . 'datastore' . DIRECTORY_SEPARATOR),
+        return implode(DIRECTORY_SEPARATOR, [
+            (string) str()->of(dirname($name))->finish(DIRECTORY_SEPARATOR.'datastore'.DIRECTORY_SEPARATOR),
             (string) str()->of(basename($name))->finish('.sqlite'),
         ]);
     }
