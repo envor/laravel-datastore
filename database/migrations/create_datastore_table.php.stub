@@ -8,11 +8,11 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::create('laravel_datastore_table', function (Blueprint $table) {
+        Schema::create('datastores', function (Blueprint $table) {
             $table->id();
-
-            // add fields
-
+            $table->uuid('uuid')->index()->unique();
+            $table->string('name')->index()->unique();
+            $table->morphs('owner');
             $table->timestamps();
         });
     }
