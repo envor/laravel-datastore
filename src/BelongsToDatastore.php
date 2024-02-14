@@ -20,4 +20,14 @@ trait BelongsToDatastore
     {
         return $this->belongsTo(Datastore::class);
     }
+
+    public function configure()
+    {
+        return $this->datastore->configure();
+    }
+
+    public function use()
+    {
+        return $this->datastore->use();
+    }
 }
