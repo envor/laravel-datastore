@@ -1,12 +1,12 @@
 <?php
 
-namespace VendorName\Skeleton\Commands;
+namespace Envor\Datastore\Commands;
 
 use Illuminate\Console\Command;
 
-class SkeletonCommand extends Command
+class DatastoreCommand extends Command
 {
-    public $signature = 'skeleton';
+    public $signature = 'laravel-datastore';
 
     public $description = 'My command';
 
