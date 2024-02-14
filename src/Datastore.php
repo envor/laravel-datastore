@@ -18,6 +18,8 @@ abstract class Datastore
 
     public ?OutputInterface $output = null;
 
+    public array $migrateOptions = [];
+
     public array $config;
 
     public array $adminConfig;
@@ -35,6 +37,23 @@ abstract class Datastore
         $this->adminConfig = $this->makeAdminConfig();
 
         $this->adminName = $this->makeAdminName($name);
+    }
+
+    public function migrateOptions(array $options): self
+    {
+        $this->migrateOptions = $options;
+
+        return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->name;
+    }
+
+    public function __destruct()
+    {
+        $this->cleanup();
     }
 
     public function clearConfigs(): void
@@ -97,7 +116,17 @@ abstract class Datastore
             $options['--path'] = $this->migrationPath;
         }
 
-        Artisan::call('migrate', $options, $this->output);
+        $options = array_merge($options, $this->migrateOptions);
+
+        $command = 'migrate';
+
+        if(array_key_exists('--fresh', $options)) {
+            $command = 'migrate:fresh';
+        }
+
+        $options = Arr::except($options, '--fresh');
+
+        Artisan::call($command, $options, $this->output);
 
         return Artisan::output();
     }
