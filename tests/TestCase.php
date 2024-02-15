@@ -3,6 +3,7 @@
 namespace Envor\Datastore\Tests;
 
 use Envor\Datastore\DatastoreServiceProvider;
+use Envor\SchemaMacros\SchemaMacrosServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
 
@@ -21,16 +22,16 @@ class TestCase extends Orchestra
     {
         return [
             DatastoreServiceProvider::class,
+            SchemaMacrosServiceProvider::class,
         ];
     }
 
     public function getEnvironmentSetUp($app)
     {
-        config()->set('database.default', 'testing');
+        config()->set('database.platform', 'testing');
 
-        /*
-        $migration = include __DIR__.'/../database/migrations/create_laravel-datastore_table.php.stub';
+        $migration = include __DIR__.'/../database/migrations/create_datastores_table.php.stub';
         $migration->up();
-        */
+
     }
 }

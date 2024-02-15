@@ -12,12 +12,6 @@ trait HasDatastoreDriver
     use HasPlatformUuids;
     use UsesPlatformConnection;
 
-    protected $guarded = [];
-
-    protected $casts = [
-        'driver' => Driver::class,
-    ];
-
     public function owner()
     {
         return $this->morphTo();
@@ -28,7 +22,7 @@ trait HasDatastoreDriver
         static::created(function (Model $model) {
             $model->driver = $model->driver ?? Driver::SQLite;
 
-            $model->createDatabase();
+            $model->createDatabase()->migrate();
         });
     }
 
@@ -42,14 +36,25 @@ trait HasDatastoreDriver
     public function createDatabase()
     {
         $this->database()->create();
+
+        return $this;
     }
 
     public function configure()
     {
-        return $this->database()->configure();
+        $this->database()->configure();
+
+        return $this;
     }
 
-    protected function database()
+    public function migrate()
+    {
+        $this->database()->migrate();
+
+        return $this;
+    }
+
+    public function database()
     {
         return $this->driver->toNewDatabase($this->name);
     }

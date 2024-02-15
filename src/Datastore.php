@@ -32,11 +32,12 @@ abstract class Datastore
     {
         $this->name = $this->makeName($name);
 
-        $this->config = $this->makeConfig();
-
+        $this->adminName = $this->makeAdminName($name);
+        
         $this->adminConfig = $this->makeAdminConfig();
 
-        $this->adminName = $this->makeAdminName($name);
+        $this->config = $this->makeConfig();
+
     }
 
     public function migrateOptions(array $options): self
@@ -50,12 +51,7 @@ abstract class Datastore
     {
         return $this->name;
     }
-
-    public function __destruct()
-    {
-        $this->cleanup();
-    }
-
+    
     public function clearConfigs(): void
     {
         $isDatastoreConfig = function ($value, $key) {
@@ -96,7 +92,6 @@ abstract class Datastore
     {
         $this->configure();
         $this->callMigrateCommand();
-        $this->cleanup();
     }
 
     public function cleanup(): void
@@ -211,8 +206,11 @@ abstract class Datastore
         $connection = $this->name;
 
         config([
-            'database.default' => $connection,
             "database.connections.{$connection}" => $this->config,
+        ]);
+
+        config([
+            'database.default' => $connection,
         ]);
     }
 

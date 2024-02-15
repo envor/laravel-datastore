@@ -6,6 +6,16 @@ use Envor\Datastore\Datastore;
 
 class SQLite extends Datastore
 {
+
+    protected function createDatabase(): void
+    {
+        if ($this->name === ':memory:') {
+            return;
+        }
+
+        parent::createDatabase();
+    }
+
     protected function makeAdminConfig() : mixed
     {
         return config('database.connections.sqlite');
@@ -29,8 +39,11 @@ class SQLite extends Datastore
         $connection = basename($this->name, '.sqlite');
 
         config([
-            'database.default' => $connection,
             "database.connections.{$connection}" => $this->config,
+        ]);
+
+        config([
+            'database.default' => $connection,
         ]);
     }
 }
