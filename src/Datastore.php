@@ -61,7 +61,7 @@ abstract class Datastore
         return $this;
     }
 
-    public function __toString()
+    public function __toString() : string
     {
         return $this->name;
     }
@@ -79,7 +79,7 @@ abstract class Datastore
         ]);
     }
 
-    public function run(callable $callback)
+    public function run(callable $callback) : mixed
     {
         $this->configure();
         $result = $callback();

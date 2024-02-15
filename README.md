@@ -53,7 +53,7 @@ $sqlite->create();
 
 $sqlite->name;
 
-// storage/app/datastore/mydb.sqlite
+// ...storage/app/datastore/mydb.sqlite
 
 $sqlite->connectionName;
 
@@ -77,7 +77,7 @@ config('database.connections.mydb');
 // [
 //     "driver" => "sqlite",
 //     "url" => null,
-//     "database" => "..storage/app/datastore/mydb.sqlite",
+//     "database" => "...storage/app/datastore/mydb.sqlite",
 //     "prefix" => "",
 //     "foreign_key_constraints" => true,
 //     "name" => "mydb",
