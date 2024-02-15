@@ -36,9 +36,10 @@ trait HasDatastoreDriver
 
     public function createDatabase()
     {
-        if($this->database()->exists()) {
-            $this->name = $this->name . '_1';
+        if ($this->database()->exists()) {
+            $this->name = $this->name.'_1';
             $this->save();
+
             return $this->createDatabase();
         }
 
@@ -61,7 +62,7 @@ trait HasDatastoreDriver
         return $this;
     }
 
-    public function database() : Datastore
+    public function database(): Datastore
     {
         return $this->driver->toNewDatabase($this->name);
     }

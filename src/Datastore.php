@@ -28,14 +28,14 @@ abstract class Datastore
 
     protected string $namePrefix = 'datastore_';
 
-    abstract protected function makeAdminConfig() : array;
+    abstract protected function makeAdminConfig(): array;
 
     public function __construct(string $name, string $disk = 'local')
     {
         $this->name = $this->makeName($name);
 
         $this->adminName = $this->makeAdminName($name);
-        
+
         $this->adminConfig = $this->makeAdminConfig();
 
         $this->connectionName = $this->makeConnectionName($name);
@@ -44,14 +44,14 @@ abstract class Datastore
 
     }
 
-    protected function makeConnectionName(string $name) : string
+    protected function makeConnectionName(string $name): string
     {
         return $this->makeName($name);
     }
 
     public function exists(): bool
     {
-        return $this->run(fn() => Schema::databaseExists($this->name));
+        return $this->run(fn () => Schema::databaseExists($this->name));
     }
 
     public function migrateOptions(array $options): self
@@ -61,11 +61,11 @@ abstract class Datastore
         return $this;
     }
 
-    public function __toString() : string
+    public function __toString(): string
     {
         return $this->name;
     }
-    
+
     public function clearConfigs(): void
     {
         $isDatastoreConfig = function ($value, $key) {
@@ -79,7 +79,7 @@ abstract class Datastore
         ]);
     }
 
-    public function run(callable $callback) : mixed
+    public function run(callable $callback): mixed
     {
         $this->configure();
         $result = $callback();
@@ -129,7 +129,7 @@ abstract class Datastore
 
         $command = 'migrate';
 
-        if(array_key_exists('--fresh', $options)) {
+        if (array_key_exists('--fresh', $options)) {
             $command = 'migrate:fresh';
         }
 
@@ -196,17 +196,17 @@ abstract class Datastore
         return true;
     }
 
-    protected function makeAdminName(string $name) : string
+    protected function makeAdminName(string $name): string
     {
         return 'admin_'.$this->makeName($name);
     }
 
-    protected function makeName(string $name) : string
+    protected function makeName(string $name): string
     {
         return $this->namePrefix.$name;
     }
 
-    protected function makeConfig() : array
+    protected function makeConfig(): array
     {
         $config = $this->adminConfig;
 
@@ -217,7 +217,7 @@ abstract class Datastore
         return $config;
     }
 
-    protected function configureDatabase() : void
+    protected function configureDatabase(): void
     {
         $connection = $this->connectionName;
 
@@ -230,7 +230,7 @@ abstract class Datastore
         ]);
     }
 
-    public function configure() : void
+    public function configure(): void
     {
         $this->clearConfigs();
         $this->cacheOriginalDefaultConfig();
@@ -238,7 +238,7 @@ abstract class Datastore
         $this->refreshConnection($this->connectionName);
     }
 
-    public function configureAdmin() : void
+    public function configureAdmin(): void
     {
         $connection = $this->adminName;
 

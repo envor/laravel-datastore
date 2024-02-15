@@ -20,7 +20,7 @@ class DatabaseFactory
 
     protected static function newSqliteDatabase(string $name, $disk = 'local')
     {
-        if($name === ':memory:') {
+        if ($name === ':memory:') {
             return new Databases\SQLite($name);
         }
 

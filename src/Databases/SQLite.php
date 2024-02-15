@@ -6,22 +6,21 @@ use Envor\Datastore\Datastore;
 
 class SQLite extends Datastore
 {
-
     protected function createDatabase(): bool
     {
         if ($this->name === ':memory:') {
             return true;
         }
 
-       return parent::createDatabase();
+        return parent::createDatabase();
     }
 
-    protected function makeAdminName(string $name) : string
+    protected function makeAdminName(string $name): string
     {
         return 'admin_'.basename($this->name, '.sqlite');
     }
 
-    protected function makeAdminConfig() : array
+    protected function makeAdminConfig(): array
     {
         $config = config('database.connections.sqlite');
 
@@ -30,7 +29,7 @@ class SQLite extends Datastore
         return $config;
     }
 
-    protected function makeName(string $name) : string
+    protected function makeName(string $name): string
     {
 
         if ($name === ':memory:') {
@@ -43,7 +42,7 @@ class SQLite extends Datastore
         ]);
     }
 
-    protected function configureDatabase() : void
+    protected function configureDatabase(): void
     {
         $connection = $this->connectionName;
 
@@ -58,6 +57,6 @@ class SQLite extends Datastore
 
     protected function makeConnectionName(string $name): string
     {
-        return basename($this->makeName($name), '.sqlite');        
+        return basename($this->makeName($name), '.sqlite');
     }
 }

@@ -23,7 +23,7 @@ trait BelongsToDatastore
         });
     }
 
-    protected function createDatastore() : Model
+    protected function createDatastore(): Model
     {
         $model = config('datastore.model');
 
@@ -33,7 +33,7 @@ trait BelongsToDatastore
         ]);
     }
 
-    public function datastore() : BelongsTo
+    public function datastore(): BelongsTo
     {
         $model = config('datastore.model');
 
