@@ -1,6 +1,6 @@
 <?php
 
-use Envor\Datastore\Tests\Fixtures\Datastore;
+use Envor\Datastore\Models\Datastore;
 use Illuminate\Support\Facades\Schema;
 
 it('will configure the datastore', function () {
