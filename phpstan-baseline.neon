@@ -6,7 +6,7 @@ parameters:
 			path: database/factories/DatastoreFactory.php
 
 		-
-			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Schema\\\\Builder\\:\\:createDatabaseIfNotExists\\(\\)\\.$#"
+			message: "#^Call to an undefined static method Illuminate\\\\Support\\\\Facades\\\\Schema\\:\\:createDatabaseIfNotExists\\(\\)\\.$#"
 			count: 1
 			path: src/Datastore.php
 
