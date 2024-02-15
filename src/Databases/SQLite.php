@@ -16,9 +16,18 @@ class SQLite extends Datastore
        return parent::createDatabase();
     }
 
-    protected function makeAdminConfig() : mixed
+    protected function makeAdminName(string $name) : string
     {
-        return config('database.connections.sqlite');
+        return 'admin_'.basename($this->name, '.sqlite');
+    }
+
+    protected function makeAdminConfig() : array
+    {
+        $config = config('database.connections.sqlite');
+
+        $config['name'] = $this->adminName;
+
+        return $config;
     }
 
     protected function makeName(string $name) : string
@@ -29,14 +38,14 @@ class SQLite extends Datastore
         }
 
         return implode(DIRECTORY_SEPARATOR, [
-            (string) str()->of(dirname($name))->finish(DIRECTORY_SEPARATOR.'datastore'.DIRECTORY_SEPARATOR),
+            (string) str()->of(dirname($name))->finish(DIRECTORY_SEPARATOR.'datastore'),
             (string) str()->of(basename($name))->finish('.sqlite'),
         ]);
     }
 
     protected function configureDatabase() : void
     {
-        $connection = basename($this->name, '.sqlite');
+        $connection = $this->connectionName;
 
         config([
             "database.connections.{$connection}" => $this->config,
@@ -45,5 +54,10 @@ class SQLite extends Datastore
         config([
             'database.default' => $connection,
         ]);
+    }
+
+    protected function makeConnectionName(string $name): string
+    {
+        return basename($this->makeName($name), '.sqlite');        
     }
 }

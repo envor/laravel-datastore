@@ -5,15 +5,7 @@
 [![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/envor/laravel-datastore/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/envor/laravel-datastore/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/envor/laravel-datastore.svg?style=flat-square)](https://packagist.org/packages/envor/laravel-datastore)
 
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
-
-## Support us
-
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/laravel-datastore.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/laravel-datastore)
-
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
-
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
+A simple strategy for handling dynamic databases of varying types
 
 ## Installation
 
@@ -26,34 +18,70 @@ composer require envor/laravel-datastore
 You can publish and run the migrations with:
 
 ```bash
-php artisan vendor:publish --tag="laravel-datastore-migrations"
+php artisan vendor:publish --tag="datastore-migrations"
 php artisan migrate
 ```
 
 You can publish the config file with:
 
 ```bash
-php artisan vendor:publish --tag="laravel-datastore-config"
+php artisan vendor:publish --tag="datastore-config"
 ```
 
 This is the contents of the published config file:
 
 ```php
 return [
+    'model' => \Envor\Datastore\Models\Datastore::class,
 ];
-```
-
-Optionally, you can publish the views using
-
-```bash
-php artisan vendor:publish --tag="laravel-datastore-views"
 ```
 
 ## Usage
 
+You actually don't need to use the model or even run migrations. You can use the factory directly like so:
+
 ```php
-$datastore = new Envor\Datastore();
-echo $datastore->echoPhrase('Hello, Envor!');
+use Envor\Datastore\DatabaseFactory;
+
+$sqlite = DatabaseFactory::newDatabase('mydb', 'sqlite');
+
+// Envor\Datastore\Databases\SQLite {#2841 ...
+
+$sqlite->create();
+
+// true
+
+$sqlite->name;
+
+// storage/app/datastore/mydb.sqlite
+
+$sqlite->connectionName;
+
+// mydb
+
+$sqlite->migrate();
+
+  //  INFO  Preparing database.  
+
+  // Creating migration table ................ 9.55ms DONE
+
+$sqlite->configure();
+
+
+config('database.default');
+
+// "mydb"
+
+config('database.connections.mydb');
+
+// [
+//     "driver" => "sqlite",
+//     "url" => null,
+//     "database" => "..storage/app/datastore/mydb.sqlite",
+//     "prefix" => "",
+//     "foreign_key_constraints" => true,
+//     "name" => "mydb",
+// ]
 ```
 
 ## Testing

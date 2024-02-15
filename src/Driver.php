@@ -10,6 +10,6 @@ enum Driver: string
 
     public function toNewDatabase($name): Datastore
     {
-        return DatabaseFactory::createForDriver($name, $this->value);
+        return DatabaseFactory::newDatabase($name, $this->value);
     }
 }

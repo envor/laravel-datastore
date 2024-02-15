@@ -14,7 +14,9 @@ abstract class Datastore
 
     public string $adminName;
 
-    public ?string $migrationPath = null;
+    public string $connectionName;
+
+    public ?string $migratePath = null;
 
     public ?OutputInterface $output = null;
 
@@ -26,7 +28,7 @@ abstract class Datastore
 
     protected string $namePrefix = 'datastore_';
 
-    abstract protected function makeAdminConfig();
+    abstract protected function makeAdminConfig() : array;
 
     public function __construct(string $name, string $disk = 'local')
     {
@@ -36,8 +38,15 @@ abstract class Datastore
         
         $this->adminConfig = $this->makeAdminConfig();
 
+        $this->connectionName = $this->makeConnectionName($name);
+
         $this->config = $this->makeConfig();
 
+    }
+
+    protected function makeConnectionName(string $name) : string
+    {
+        return $this->makeName($name);
     }
 
     public function exists(): bool
@@ -86,9 +95,9 @@ abstract class Datastore
         return $this;
     }
 
-    public function migrationPath(string $path): self
+    public function migratePath(string $path): self
     {
-        $this->migrationPath = $path;
+        $this->migratePath = $path;
 
         return $this;
     }
@@ -112,8 +121,8 @@ abstract class Datastore
             '--force' => true,
         ];
 
-        if ($this->migrationPath) {
-            $options['--path'] = $this->migrationPath;
+        if ($this->migratePath) {
+            $options['--path'] = $this->migratePath;
         }
 
         $options = array_merge($options, $this->migrateOptions);
@@ -151,12 +160,11 @@ abstract class Datastore
 
     protected function createDatabase(): bool
     {
-        return Schema::connection($this->adminName)->createDatabaseIfNotExists($this->name);
+        return Schema::createDatabaseIfNotExists($this->name);
     }
 
     protected function refreshConnection($connectionName): void
     {
-        DB::purge($connectionName);
         DB::reconnect($connectionName);
     }
 
@@ -181,7 +189,6 @@ abstract class Datastore
 
         config([
             'database.default' => $original['key'],
-            "database.connections.{$original['key']}" => $original['config'],
         ]);
 
         cache()->forget('original_default_database');
@@ -205,12 +212,14 @@ abstract class Datastore
 
         $config['database'] = $this->name;
 
+        $config['name'] = $this->connectionName;
+
         return $config;
     }
 
     protected function configureDatabase() : void
     {
-        $connection = $this->name;
+        $connection = $this->connectionName;
 
         config([
             "database.connections.{$connection}" => $this->config,
@@ -226,7 +235,7 @@ abstract class Datastore
         $this->clearConfigs();
         $this->cacheOriginalDefaultConfig();
         $this->configureDatabase();
-        $this->refreshConnection($this->name);
+        $this->refreshConnection($this->connectionName);
     }
 
     public function configureAdmin() : void
