@@ -1,7 +1,17 @@
 parameters:
 	ignoreErrors:
 		-
+			message: "#^PHPDoc type string of property Envor\\\\Datastore\\\\Database\\\\Factories\\\\DatastoreFactory\\:\\:\\$model is not covariant with PHPDoc type class\\-string\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Factories\\\\Factory\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\:\\:\\$model\\.$#"
+			count: 1
+			path: database/factories/DatastoreFactory.php
+
+		-
 			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Schema\\\\Builder\\:\\:createDatabaseIfNotExists\\(\\)\\.$#"
+			count: 1
+			path: src/Datastore.php
+
+		-
+			message: "#^Call to an undefined static method Illuminate\\\\Support\\\\Facades\\\\Schema\\:\\:databaseExists\\(\\)\\.$#"
 			count: 1
 			path: src/Datastore.php
 
@@ -11,6 +21,61 @@ parameters:
 			path: src/Datastore.php
 
 		-
+			message: "#^Access to an undefined property Envor\\\\Datastore\\\\Models\\\\Datastore\\:\\:\\$driver\\.$#"
+			count: 1
+			path: src/Models/Datastore.php
+
+		-
+			message: "#^Access to an undefined property Envor\\\\Datastore\\\\Models\\\\Datastore\\:\\:\\$name\\.$#"
+			count: 3
+			path: src/Models/Datastore.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$driver\\.$#"
+			count: 1
+			path: src/Models/Datastore.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:createDatabase\\(\\)\\.$#"
+			count: 1
+			path: src/Models/Datastore.php
+
+		-
 			message: "#^Call to an undefined method Pest\\\\PendingCalls\\\\TestCall\\:\\:expect\\(\\)\\.$#"
 			count: 1
 			path: tests/ArchTest.php
+
+		-
+			message: "#^Access to an undefined property Envor\\\\Datastore\\\\Tests\\\\Fixtures\\\\Datastore\\:\\:\\$driver\\.$#"
+			count: 1
+			path: tests/Fixtures/Datastore.php
+
+		-
+			message: "#^Access to an undefined property Envor\\\\Datastore\\\\Tests\\\\Fixtures\\\\Datastore\\:\\:\\$name\\.$#"
+			count: 3
+			path: tests/Fixtures/Datastore.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$driver\\.$#"
+			count: 1
+			path: tests/Fixtures/Datastore.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:createDatabase\\(\\)\\.$#"
+			count: 1
+			path: tests/Fixtures/Datastore.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Collection\\<int, Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\|Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:configure\\(\\)\\.$#"
+			count: 1
+			path: tests/HasDatastoreDriverTest.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Collection\\<int, Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\|Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:database\\(\\)\\.$#"
+			count: 4
+			path: tests/HasDatastoreDriverTest.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Collection\\<int, Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\|Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:migrate\\(\\)\\.$#"
+			count: 1
+			path: tests/HasDatastoreDriverTest.php
