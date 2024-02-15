@@ -2,9 +2,9 @@
 
 namespace Envor\Datastore\Concerns;
 
-use Envor\Datastore\Models\Datastore;
 use Envor\Platform\Concerns\HasPlatformUuids;
 use Envor\Platform\Concerns\UsesPlatformConnection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 trait BelongsToDatastore
@@ -23,17 +23,21 @@ trait BelongsToDatastore
         });
     }
 
-    protected function createDatastore() : Datastore
+    protected function createDatastore() : Model
     {
-        return Datastore::create([
+        $model = config('datastore.model');
+
+        return $model::create([
             'name' => (string) str()->of($this->name)->slug('_'),
-            'driver' => $this->datastore_driver ?? Datastore::DEFAULT_DRIVER,
+            'driver' => $this->datastore_driver ?? $model::DEFAULT_DRIVER,
         ]);
     }
 
     public function datastore() : BelongsTo
     {
-        return $this->belongsTo(Datastore::class);
+        $model = config('datastore.model');
+
+        return $this->belongsTo($model, 'datastore_id', 'id');
     }
 
     public function migrate()

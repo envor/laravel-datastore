@@ -4,7 +4,10 @@ use Envor\Datastore\Models\Datastore;
 use Illuminate\Support\Facades\Schema;
 
 it('will configure the datastore', function () {
-    $datastore = Datastore::factory()->create();
+    /** @var Datastore $datastoreModel */
+    $datastoreModel = config('datastore.model');
+
+    $datastore = $datastoreModel::factory()->create();
 
     $datastore->configure();
 
@@ -14,7 +17,10 @@ it('will configure the datastore', function () {
 });
 
 it('will create and migrate the datastore', function () {
-    $datastore = Datastore::factory()->create();
+    /** @var Datastore $datastoreModel */
+    $datastoreModel = config('datastore.model');
+
+    $datastore = $datastoreModel::factory()->create();
 
     $datastore->migrate();
 
