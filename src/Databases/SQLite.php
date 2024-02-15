@@ -7,13 +7,13 @@ use Envor\Datastore\Datastore;
 class SQLite extends Datastore
 {
 
-    protected function createDatabase(): void
+    protected function createDatabase(): bool
     {
         if ($this->name === ':memory:') {
-            return;
+            return true;
         }
 
-        parent::createDatabase();
+       return parent::createDatabase();
     }
 
     protected function makeAdminConfig() : mixed

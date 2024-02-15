@@ -40,6 +40,11 @@ abstract class Datastore
 
     }
 
+    public function exists(): bool
+    {
+        return $this->run(fn() => Schema::databaseExists($this->name));
+    }
+
     public function migrateOptions(array $options): self
     {
         $this->migrateOptions = $options;
@@ -126,15 +131,17 @@ abstract class Datastore
         return Artisan::output();
     }
 
-    public function create(): void
+    public function create(): bool
     {
         $this->clearConfigs();
         $this->cacheOriginalDefaultConfig();
         $this->configureAdmin();
         $this->refreshConnection($this->adminName);
-        $this->createDatabase();
+        $created = $this->createDatabase();
         $this->purgeAdmin();
         $this->cleanup();
+
+        return $created;
     }
 
     protected function purgeAdmin(): void
@@ -142,9 +149,9 @@ abstract class Datastore
         DB::purge($this->adminName);
     }
 
-    protected function createDatabase(): void
+    protected function createDatabase(): bool
     {
-        Schema::connection($this->adminName)->createDatabaseIfNotExists($this->name);
+        return Schema::connection($this->adminName)->createDatabaseIfNotExists($this->name);
     }
 
     protected function refreshConnection($connectionName): void

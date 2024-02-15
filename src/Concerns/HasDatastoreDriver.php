@@ -2,6 +2,7 @@
 
 namespace Envor\Datastore\Concerns;
 
+use Envor\Datastore\Datastore;
 use Envor\Datastore\Driver;
 use Envor\Platform\Concerns\HasPlatformUuids;
 use Envor\Platform\Concerns\UsesPlatformConnection;
@@ -35,6 +36,12 @@ trait HasDatastoreDriver
 
     public function createDatabase()
     {
+        if($this->database()->exists()) {
+            $this->name = $this->name . '_1';
+            $this->save();
+            return $this->createDatabase();
+        }
+
         $this->database()->create();
 
         return $this;
@@ -54,7 +61,7 @@ trait HasDatastoreDriver
         return $this;
     }
 
-    public function database()
+    public function database() : Datastore
     {
         return $this->driver->toNewDatabase($this->name);
     }
