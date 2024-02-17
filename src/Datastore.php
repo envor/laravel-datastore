@@ -2,84 +2,107 @@
 
 namespace Envor\Datastore;
 
+use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Symfony\Component\Console\Output\OutputInterface;
 
 abstract class Datastore
 {
-    public string $name;
+    public ?string $connection = null;
 
-    public string $adminName;
+    public ?string $adminConnection = null;
 
-    public string $connectionName;
-
-    public ?string $migratePath = null;
-
-    public ?OutputInterface $output = null;
+    public ?string $migrationPath = null;
 
     public array $migrateOptions = [];
 
-    public array $config;
+    public array $config = [];
 
-    public array $adminConfig;
+    public array $adminConfig = [];
 
-    protected string $namePrefix = 'datastore_';
+    protected bool $prefixed = false;
 
-    abstract protected function makeAdminConfig() : array;
+    public ?OutputInterface $output = null;
 
-    public function __construct(string $name)
+    private function __construct(private string $name)
     {
         static::booting($name, $this);
         static::boot($name, $this);
         static::booted($name, $this);
     }
 
-    protected static function booting(string $name, self $instance) : void
+    private function __destruct()
     {
-        //
+        if ($this->prefixed) {
+            config([
+                'database.connections' => Arr::except(config('database.connections'), [$this->connection, $this->adminConnection]),
+            ]);
+
+            app(DatabaseManager::class)->purge($this->connection);
+
+            return;
+        }
+
+        config([
+            'database.connections' => Arr::except(config('database.connections'), $this->adminConnection),
+        ]);
+
+        app(DatabaseManager::class)->purge($this->adminConnection);
     }
 
-    protected static function booted(string $name, self $instance) : void
-    {
-        //
-    }
-
-    protected static function boot(string $name, self $instance) : self
-    {
-        $instance->name = $instance->makeName($name);
-        $instance->adminName = $instance->makeAdminName($name);
-        $instance->adminConfig = $instance->makeAdminConfig();
-        $instance->connectionName = $instance->makeConnectionName($name);
-        $instance->config = $instance->makeConfig();
-        return $instance;
-    }
-
-    protected static function make(string $name) : self
+    public static function make(string $name) : static
     {
         return new static($name);
     }
 
-    public function prefix(string $prefix = '') : self
+    public static function withPrefix(string $name, string $prefix) : static
     {
-        $oldPrefix = $this->namePrefix;
-        $this->namePrefix = $prefix;
+        $instance = new static($prefix.$name);
 
-        static::boot(str()->of($this->name)->replace($oldPrefix, ''), $this);
+        $instance->prefixed = true;
+
+        return $instance;
+    }
+
+    public function exists() : bool
+    {
+        $this->configureAdmin();
+
+        return (bool) app(DatabaseManager::class)->usingConnection($this->adminConnection,
+            fn () => Schema::databaseExists($this->name),
+        );
+    }
+
+    public function create() : bool|static
+    {
+        if ($this->exists()) {
+            return false;
+        }
+
+        if ($this->createDatabase()) {
+            return $this;
+        }
+
+        return false;
+    }
+
+    public function configure() : static
+    {
+        config([
+            "database.connections.{$this->connection}" => $this->config,
+        ]);
+
+        app(DatabaseManager::class)->setDefaultConnection($this->connection);
 
         return $this;
     }
 
-    protected function makeConnectionName(string $name) : string
+    public function migrate(): void
     {
-        return $this->makeName($name);
-    }
-
-    public function exists(): bool
-    {
-        return $this->run(fn() => Schema::databaseExists($this->name));
+        $this->configure();
+        $this->callMigrateCommand();
     }
 
     public function migrateOptions(array $options): self
@@ -87,62 +110,6 @@ abstract class Datastore
         $this->migrateOptions = $options;
 
         return $this;
-    }
-
-    public function __toString() : string
-    {
-        return $this->name;
-    }
-    
-    public function clearConfigs(): void
-    {
-        $isDatastoreConfig = function ($value, $key) {
-            return str()->startsWith($key, $this->namePrefix, true) || str()->startsWith($key, 'admin_'.$this->namePrefix, true);
-        };
-
-        $datastoreConfigs = Arr::where(config('database.connections'), $isDatastoreConfig);
-
-        config([
-            'database.connections' => Arr::except(config('database.connections'), array_keys($datastoreConfigs)),
-        ]);
-    }
-
-    public function run(callable $callback) : mixed
-    {
-        $this->configure();
-        $result = $callback();
-        $this->cleanup();
-
-        return $result;
-    }
-
-    public function output(OutputInterface $output): self
-    {
-        $this->output = $output;
-
-        return $this;
-    }
-
-    public function migratePath(string $path): self
-    {
-        $this->migratePath = $path;
-
-        return $this;
-    }
-
-    public function migrate(array $options = []): void
-    {
-        $this->migrateOptions($options);
-        $this->configure();
-        $this->callMigrateCommand();
-        $this->cleanup();
-    }
-
-    public function cleanup(): void
-    {
-        $this->restoreOriginalDefaultConfig();
-        // $this->refreshConnection(config('database.default'));
-        $this->clearConfigs();
     }
 
     protected function callMigrateCommand(): string
@@ -159,7 +126,7 @@ abstract class Datastore
 
         $command = 'migrate';
 
-        if(array_key_exists('--fresh', $options)) {
+        if (array_key_exists('--fresh', $options)) {
             $command = 'migrate:fresh';
         }
 
@@ -170,108 +137,66 @@ abstract class Datastore
         return Artisan::output();
     }
 
-    public function create(): bool
+
+
+    protected function createDatabase() : bool
     {
-        $this->clearConfigs();
-        $this->cacheOriginalDefaultConfig();
         $this->configureAdmin();
-        // $this->refreshConnection($this->adminName);
-        $created = $this->createDatabase();
-        $this->purgeAdmin();
-        $this->cleanup();
 
-        return $created;
+       return (bool) app(DatabaseManager::class)->usingConnection($this->adminConnection,
+            fn () => Schema::createDatabaseIfNotExists($this->name),
+        );
     }
 
-    protected function purgeAdmin(): void
+    protected function configureAdmin() : void
     {
-        DB::purge($this->adminName);
-    }
-
-    protected function createDatabase(): bool
-    {
-        return Schema::createDatabaseIfNotExists($this->name);
-    }
-
-    protected function refreshConnection($connectionName): void
-    {
-        DB::reconnect($connectionName);
-    }
-
-    protected function cacheOriginalDefaultConfig(): void
-    {
-        $key = config('database.default');
-        $config = config("database.connections.{$key}");
-
-        cache()->forever('original_default_database', [
-            'key' => $key,
-            'config' => $config,
-        ]);
-    }
-
-    protected function restoreOriginalDefaultConfig(): bool
-    {
-        $original = cache()->get('original_default_database');
-
-        if (! $original) {
-            return false;
-        }
-
         config([
-            'database.default' => $original['key'],
-        ]);
-
-        cache()->forget('original_default_database');
-
-        return true;
-    }
-
-    protected function makeAdminName(string $name) : string
-    {
-        return trim((string) str()->of($this->makeName($name))->start('admin_'));
-    }
-
-    protected function makeName(string $name) : string
-    {
-        return trim((string) str()->of($name)->slug('_')->start($this->namePrefix), '_');
-    }
-
-    protected function makeConfig() : array
-    {
-        $config = $this->adminConfig;
-
-        $config['database'] = $this->name;
-
-        $config['name'] = $this->connectionName;
-
-        return $config;
-    }
-
-    protected function configureDatabase() : void
-    {
-        $connection = $this->connectionName;
-
-        config([
-            "database.connections.{$connection}" => $this->config,
-            'database.default' => $connection,
+            "database.connections.{$this->adminConnection}" => $this->adminConfig,
         ]);
     }
 
-    public function configure() : void
+    protected static function boot(string $name, Datastore $datastore) : void
     {
-        $this->clearConfigs();
-        $this->cacheOriginalDefaultConfig();
-        $this->configureDatabase();
-        $this->refreshConnection($this->connectionName);
+        $datastore->name = static::makeName($name);
+        $datastore->connection = static::makeConnection($name);
+        $datastore->adminConnection = static::makeAdminConnection($name);
+        $datastore->adminConfig = static::makeAdminConfig($name);
+        $datastore->config = static::makeConfig($datastore);
     }
 
-    public function configureAdmin() : void
+    protected static function makeConfig(Datastore $datastore) : array
     {
-        $connection = $this->adminName;
 
-        config([
-            "database.connections.{$connection}" => $this->adminConfig,
-            'database.default' => $connection,
+        return array_merge($datastore->adminConfig, [
+            'name' => $datastore->connection,
+            'database' => $datastore->name,
         ]);
+    }
+
+    abstract protected static function makeAdminConfig() : array;
+
+    protected static function makeAdminConnection(string $name) : string
+    {
+        return 'datastore_admin_'.$name;
+    }
+
+    protected static function makeConnection(string $name) : string
+    {
+        return $name;
+    }
+
+    protected static function makeName(string $name) : string
+    {
+        return $name;
+    }
+
+    protected static function booting(string $name, Datastore $datastore) : void
+    {
+        //
+    }
+
+    protected static function booted(string $name, Datastore $datastore) : void
+    {
+        //
     }
 }
