@@ -7,6 +7,11 @@ use Envor\Datastore\Datastore;
 class SQLite extends Datastore
 {
 
+    protected static function makeConnection(string $name) : string
+    {
+        return basename(static::makeName($name), '.sqlite');
+    }
+
     public static function withPrefix(string $name, string $prefix): static
     {
 

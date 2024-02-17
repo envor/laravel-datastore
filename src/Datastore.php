@@ -14,7 +14,9 @@ abstract class Datastore
 
     public ?string $adminConnection = null;
 
-    public ?string $migrationPath = null;
+    public ?string $migratePath = null;
+
+    public ?OutputInterface $output = null;
 
     public array $migrateOptions = [];
 
@@ -57,7 +59,7 @@ abstract class Datastore
     public function create() : bool|static
     {
         if ($this->exists()) {
-            return false;
+            return $this;
         }
 
         if ($this->createDatabase()) {
@@ -97,12 +99,14 @@ abstract class Datastore
         return $this;
     }
 
-    public function migrate(?array $options = null): void
+    public function migrate(?array $options = null): static
     {
         if ($options) {
             $this->migrateOptions($options);
         }
         $this->run(fn () => $this->callMigrateCommand());
+
+        return $this;
     }
 
     public function migrateOptions(array $options): static
@@ -165,7 +169,7 @@ abstract class Datastore
         $datastore->name = static::makeName($name);
         $datastore->connection = static::makeConnection($name);
         $datastore->adminConnection = static::makeAdminConnection($name);
-        $datastore->adminConfig = static::makeAdminConfig($name);
+        $datastore->adminConfig = static::makeAdminConfig($datastore);
         $datastore->config = static::makeConfig($datastore);
     }
 
@@ -203,24 +207,5 @@ abstract class Datastore
     protected static function booted(string $name, Datastore $datastore) : void
     {
         //
-    }
-
-    private function __destruct()
-    {
-        if ($this->prefixed) {
-            config([
-                'database.connections' => Arr::except(config('database.connections'), [$this->connection, $this->adminConnection]),
-            ]);
-
-            app(DatabaseManager::class)->purge($this->connection);
-
-            return;
-        }
-
-        config([
-            'database.connections' => Arr::except(config('database.connections'), $this->adminConnection),
-        ]);
-
-        app(DatabaseManager::class)->purge($this->adminConnection);
     }
 }
