@@ -6,59 +6,37 @@ use Envor\Datastore\Datastore;
 
 class SQLite extends Datastore
 {
-    protected string $namePrefix = 'datastore';
 
-    protected function createDatabase(): bool
+    public static function withPrefix(string $name, string $prefix): static
     {
-        if ($this->name === ':memory:') {
-            return true;
-        }
 
-       return parent::createDatabase();
+        $directory = dirname($name) . DIRECTORY_SEPARATOR . $prefix;
+
+        $instance = static::make($directory . DIRECTORY_SEPARATOR . basename($name));
+
+        $instance->prefixed = true;
+
+        return $instance;
     }
 
-    protected function makeAdminName(string $name) : string
-    {
-        return 'admin_'.basename($this->name, '.sqlite');
-    }
-
-    protected function makeAdminConfig() : array
+    protected static function makeAdminConfig(Datastore $datastore): array
     {
         $config = config('database.connections.sqlite');
 
-        $config['name'] = $this->adminName;
+        $config['name'] = $datastore->adminConnection;
 
         return $config;
     }
 
-    protected function makeName(string $name) : string
+    protected static function makeName(string $name): string
     {
-
-        if ($name === ':memory:') {
-            return $name;
+        if(str()->of($name)->contains(':memory:')) {
+            return ':memory:';
         }
 
         return implode(DIRECTORY_SEPARATOR, [
-            (string) str()->of(dirname($name))->finish(DIRECTORY_SEPARATOR.$this->namePrefix),
+            (string) str()->of(dirname($name)),
             (string) str()->of(basename($name))->finish('.sqlite'),
         ]);
-    }
-
-    protected function configureDatabase() : void
-    {
-        $connection = $this->connectionName;
-
-        config([
-            "database.connections.{$connection}" => $this->config,
-        ]);
-
-        config([
-            'database.default' => $connection,
-        ]);
-    }
-
-    protected function makeConnectionName(string $name): string
-    {
-        return basename($this->makeName($name), '.sqlite');        
     }
 }

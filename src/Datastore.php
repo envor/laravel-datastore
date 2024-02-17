@@ -24,32 +24,11 @@ abstract class Datastore
 
     protected bool $prefixed = false;
 
-    public ?OutputInterface $output = null;
-
-    private function __construct(private string $name)
+    private function __construct(private string $name, protected ?string $prefix = null)
     {
-        static::booting($name, $this);
-        static::boot($name, $this);
-        static::booted($name, $this);
-    }
-
-    private function __destruct()
-    {
-        if ($this->prefixed) {
-            config([
-                'database.connections' => Arr::except(config('database.connections'), [$this->connection, $this->adminConnection]),
-            ]);
-
-            app(DatabaseManager::class)->purge($this->connection);
-
-            return;
-        }
-
-        config([
-            'database.connections' => Arr::except(config('database.connections'), $this->adminConnection),
-        ]);
-
-        app(DatabaseManager::class)->purge($this->adminConnection);
+        static::booting($name, $this, $prefix);
+        static::boot($name, $this, $prefix);
+        static::booted($name, $this, $prefix);
     }
 
     public static function make(string $name) : static
@@ -59,7 +38,7 @@ abstract class Datastore
 
     public static function withPrefix(string $name, string $prefix) : static
     {
-        $instance = new static($prefix.$name);
+        $instance = static::make($prefix.'_'.$name);
 
         $instance->prefixed = true;
 
@@ -68,7 +47,7 @@ abstract class Datastore
 
     public function exists() : bool
     {
-        $this->configureAdmin();
+        $this->pushAdminConfig();
 
         return (bool) app(DatabaseManager::class)->usingConnection($this->adminConnection,
             fn () => Schema::databaseExists($this->name),
@@ -90,24 +69,52 @@ abstract class Datastore
 
     public function configure() : static
     {
-        config([
-            "database.connections.{$this->connection}" => $this->config,
-        ]);
+        $this->pushConfig();
 
         app(DatabaseManager::class)->setDefaultConnection($this->connection);
 
         return $this;
     }
 
-    public function migrate(): void
+    protected function pushConfig() : void
     {
-        $this->configure();
-        $this->callMigrateCommand();
+        config([
+            "database.connections.{$this->connection}" => $this->config,
+        ]);
     }
 
-    public function migrateOptions(array $options): self
+    public function run (?callable $callback = null) : mixed
+    {
+        $this->pushConfig();
+
+        return app(DatabaseManager::class)->usingConnection($this->connection, $callback);
+    }
+
+    public function migratePath(string $path) : static
+    {
+        $this->migratePath = $path;
+
+        return $this;
+    }
+
+    public function migrate(?array $options = null): void
+    {
+        if ($options) {
+            $this->migrateOptions($options);
+        }
+        $this->run(fn () => $this->callMigrateCommand());
+    }
+
+    public function migrateOptions(array $options): static
     {
         $this->migrateOptions = $options;
+
+        return $this;
+    }
+
+    public function output(OutputInterface $output): static
+    {
+        $this->output = $output;
 
         return $this;
     }
@@ -126,7 +133,7 @@ abstract class Datastore
 
         $command = 'migrate';
 
-        if (array_key_exists('--fresh', $options)) {
+        if(array_key_exists('--fresh', $options)) {
             $command = 'migrate:fresh';
         }
 
@@ -137,18 +144,16 @@ abstract class Datastore
         return Artisan::output();
     }
 
-
-
     protected function createDatabase() : bool
     {
-        $this->configureAdmin();
+        $this->pushAdminConfig();
 
        return (bool) app(DatabaseManager::class)->usingConnection($this->adminConnection,
             fn () => Schema::createDatabaseIfNotExists($this->name),
         );
     }
 
-    protected function configureAdmin() : void
+    protected function pushAdminConfig() : void
     {
         config([
             "database.connections.{$this->adminConnection}" => $this->adminConfig,
@@ -173,7 +178,7 @@ abstract class Datastore
         ]);
     }
 
-    abstract protected static function makeAdminConfig() : array;
+    abstract protected static function makeAdminConfig(Datastore $datastore) : array;
 
     protected static function makeAdminConnection(string $name) : string
     {
@@ -198,5 +203,24 @@ abstract class Datastore
     protected static function booted(string $name, Datastore $datastore) : void
     {
         //
+    }
+
+    private function __destruct()
+    {
+        if ($this->prefixed) {
+            config([
+                'database.connections' => Arr::except(config('database.connections'), [$this->connection, $this->adminConnection]),
+            ]);
+
+            app(DatabaseManager::class)->purge($this->connection);
+
+            return;
+        }
+
+        config([
+            'database.connections' => Arr::except(config('database.connections'), $this->adminConnection),
+        ]);
+
+        app(DatabaseManager::class)->purge($this->adminConnection);
     }
 }
