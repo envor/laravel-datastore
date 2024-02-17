@@ -20,7 +20,7 @@ class DatabaseFactory
 
     protected static function prefixedSqlite(string $name, $disk = 'local')
     {
-        if($name === ':memory:') {
+        if ($name === ':memory:') {
             return Databases\SQLite::make($name);
         }
 

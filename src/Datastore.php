@@ -33,12 +33,12 @@ abstract class Datastore
         static::booted($name, $this, $prefix);
     }
 
-    public static function make(string $name) : static
+    public static function make(string $name): static
     {
         return new static($name);
     }
 
-    public static function withPrefix(string $name, string $prefix) : static
+    public static function withPrefix(string $name, string $prefix): static
     {
         $instance = static::make($prefix.'_'.$name);
 
@@ -47,7 +47,7 @@ abstract class Datastore
         return $instance;
     }
 
-    public function exists() : bool
+    public function exists(): bool
     {
         $this->pushAdminConfig();
 
@@ -56,7 +56,7 @@ abstract class Datastore
         );
     }
 
-    public function create() : bool|static
+    public function create(): bool|static
     {
         if ($this->exists()) {
             return $this;
@@ -69,7 +69,7 @@ abstract class Datastore
         return false;
     }
 
-    public function configure() : static
+    public function configure(): static
     {
         $this->pushConfig();
 
@@ -78,21 +78,21 @@ abstract class Datastore
         return $this;
     }
 
-    protected function pushConfig() : void
+    protected function pushConfig(): void
     {
         config([
             "database.connections.{$this->connection}" => $this->config,
         ]);
     }
 
-    public function run (?callable $callback = null) : mixed
+    public function run(?callable $callback = null): mixed
     {
         $this->pushConfig();
 
         return app(DatabaseManager::class)->usingConnection($this->connection, $callback);
     }
 
-    public function migratePath(string $path) : static
+    public function migratePath(string $path): static
     {
         $this->migratePath = $path;
 
@@ -137,7 +137,7 @@ abstract class Datastore
 
         $command = 'migrate';
 
-        if(array_key_exists('--fresh', $options)) {
+        if (array_key_exists('--fresh', $options)) {
             $command = 'migrate:fresh';
         }
 
@@ -148,23 +148,23 @@ abstract class Datastore
         return Artisan::output();
     }
 
-    protected function createDatabase() : bool
+    protected function createDatabase(): bool
     {
         $this->pushAdminConfig();
 
-       return (bool) app(DatabaseManager::class)->usingConnection($this->adminConnection,
+        return (bool) app(DatabaseManager::class)->usingConnection($this->adminConnection,
             fn () => Schema::createDatabaseIfNotExists($this->name),
         );
     }
 
-    protected function pushAdminConfig() : void
+    protected function pushAdminConfig(): void
     {
         config([
             "database.connections.{$this->adminConnection}" => $this->adminConfig,
         ]);
     }
 
-    protected static function boot(string $name, Datastore $datastore) : void
+    protected static function boot(string $name, Datastore $datastore): void
     {
         $datastore->name = static::makeName($name);
         $datastore->connection = static::makeConnection($name);
@@ -173,7 +173,7 @@ abstract class Datastore
         $datastore->config = static::makeConfig($datastore);
     }
 
-    protected static function makeConfig(Datastore $datastore) : array
+    protected static function makeConfig(Datastore $datastore): array
     {
 
         return array_merge($datastore->adminConfig, [
@@ -182,29 +182,29 @@ abstract class Datastore
         ]);
     }
 
-    abstract protected static function makeAdminConfig(Datastore $datastore) : array;
+    abstract protected static function makeAdminConfig(Datastore $datastore): array;
 
-    protected static function makeAdminConnection(string $name) : string
+    protected static function makeAdminConnection(string $name): string
     {
         return 'datastore_admin_'.$name;
     }
 
-    protected static function makeConnection(string $name) : string
+    protected static function makeConnection(string $name): string
     {
         return $name;
     }
 
-    protected static function makeName(string $name) : string
+    protected static function makeName(string $name): string
     {
         return $name;
     }
 
-    protected static function booting(string $name, Datastore $datastore) : void
+    protected static function booting(string $name, Datastore $datastore): void
     {
         //
     }
 
-    protected static function booted(string $name, Datastore $datastore) : void
+    protected static function booted(string $name, Datastore $datastore): void
     {
         //
     }

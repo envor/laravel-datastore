@@ -22,7 +22,7 @@ trait HasDatastoreDriver
     protected static function bootHasDatastoreDriver()
     {
         static::created(function (self $model) {
-            if(!$model->driver){
+            if (! $model->driver) {
                 $model->driver = $model::DEFAULT_DRIVER;
                 $model->save();
             }
@@ -39,9 +39,10 @@ trait HasDatastoreDriver
 
     public function createDatabase()
     {
-        if($this->database()->exists()) {
-            $this->name = $this->name . '_1';
+        if ($this->database()->exists()) {
+            $this->name = $this->name.'_1';
             $this->save();
+
             return $this->createDatabase();
         }
 
@@ -64,7 +65,7 @@ trait HasDatastoreDriver
         return $this;
     }
 
-    public function database() : Datastore
+    public function database(): Datastore
     {
         return $this->driver->toNewDatabase($this->name);
     }

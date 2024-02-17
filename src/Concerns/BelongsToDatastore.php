@@ -23,7 +23,7 @@ trait BelongsToDatastore
         });
     }
 
-    protected function createDatastore() : Model
+    protected function createDatastore(): Model
     {
         $model = config('datastore.model');
         $auth = config('auth.providers.users.model');
@@ -33,17 +33,17 @@ trait BelongsToDatastore
             'driver' => $this->datastore_driver ?? $model::DEFAULT_DRIVER,
         ];
 
-        if($this->user_id) {
+        if ($this->user_id) {
             $attributes['owner_type'] = $auth;
             $attributes['owner_id'] = $this->user_id;
         }
-        
+
         // dd($attributes, $model::create($attributes));
 
         return $model::create($attributes);
     }
 
-    public function datastore() : BelongsTo
+    public function datastore(): BelongsTo
     {
         $model = config('datastore.model');
 

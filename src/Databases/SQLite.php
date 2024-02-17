@@ -6,8 +6,7 @@ use Envor\Datastore\Datastore;
 
 class SQLite extends Datastore
 {
-
-    protected static function makeConnection(string $name) : string
+    protected static function makeConnection(string $name): string
     {
         return basename(static::makeName($name), '.sqlite');
     }
@@ -15,9 +14,9 @@ class SQLite extends Datastore
     public static function withPrefix(string $name, string $prefix): static
     {
 
-        $directory = dirname($name) . DIRECTORY_SEPARATOR . $prefix;
+        $directory = dirname($name).DIRECTORY_SEPARATOR.$prefix;
 
-        $instance = static::make($directory . DIRECTORY_SEPARATOR . basename($name));
+        $instance = static::make($directory.DIRECTORY_SEPARATOR.basename($name));
 
         $instance->prefixed = true;
 
@@ -35,7 +34,7 @@ class SQLite extends Datastore
 
     protected static function makeName(string $name): string
     {
-        if(str()->of($name)->contains(':memory:')) {
+        if (str()->of($name)->contains(':memory:')) {
             return ':memory:';
         }
 
