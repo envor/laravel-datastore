@@ -6,6 +6,7 @@ use Envor\Datastore\Datastore;
 
 class SQLite extends Datastore
 {
+    protected string $namePrefix = 'datastore';
 
     protected function createDatabase(): bool
     {
@@ -38,7 +39,7 @@ class SQLite extends Datastore
         }
 
         return implode(DIRECTORY_SEPARATOR, [
-            (string) str()->of(dirname($name))->finish(DIRECTORY_SEPARATOR.'datastore'),
+            (string) str()->of(dirname($name))->finish(DIRECTORY_SEPARATOR.$this->namePrefix),
             (string) str()->of(basename($name))->finish('.sqlite'),
         ]);
     }

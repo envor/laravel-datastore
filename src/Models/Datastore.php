@@ -12,8 +12,6 @@ class Datastore extends Model
     use HasDatastoreDriver;
     use HasFactory;
 
-    public const DEFAULT_DRIVER = Driver::SQLite;
-
     protected $guarded = [];
 
     protected $casts = [

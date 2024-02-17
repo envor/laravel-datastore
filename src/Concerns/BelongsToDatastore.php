@@ -26,11 +26,21 @@ trait BelongsToDatastore
     protected function createDatastore() : Model
     {
         $model = config('datastore.model');
+        $auth = config('auth.providers.users.model');
 
-        return $model::create([
+        $attributes = [
             'name' => (string) str()->of($this->name)->slug('_'),
             'driver' => $this->datastore_driver ?? $model::DEFAULT_DRIVER,
-        ]);
+        ];
+
+        if($this->user_id) {
+            $attributes['owner_type'] = $auth;
+            $attributes['owner_id'] = $this->user_id;
+        }
+        
+        // dd($attributes, $model::create($attributes));
+
+        return $model::create($attributes);
     }
 
     public function datastore() : BelongsTo
@@ -49,30 +59,48 @@ trait BelongsToDatastore
 
     public function configure()
     {
-        $this->preconfigure();
+        $this->configuring();
 
         $this->datastore?->configure();
+
+        $this->configured();
 
         return $this;
     }
 
     public function use()
     {
-        $this->preuse();
+        $this->using();
 
         $this->datastore?->use();
+
+        $this->used();
 
         return $this;
     }
 
-    protected function preuse()
+    protected function used()
     {
         //
 
         return $this;
     }
 
-    protected function preconfigure()
+    protected function configured()
+    {
+        //
+
+        return $this;
+    }
+
+    protected function using()
+    {
+        //
+
+        return $this;
+    }
+
+    protected function configuring()
     {
         //
 

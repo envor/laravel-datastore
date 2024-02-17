@@ -22,7 +22,7 @@ class DatastoreServiceProvider extends PackageServiceProvider
             ->name('laravel-datastore')
             ->hasConfigFile()
             ->hasViews()
-            ->hasMigration('create_laravel-datastore_table')
+            ->hasMigrations(['platform/create_datastores_table', 'platform/create_teams_table'])
             ->hasCommand(DatastoreCommand::class);
     }
 

@@ -6,12 +6,13 @@ use Envor\Datastore\Datastore;
 use Envor\Datastore\Driver;
 use Envor\Platform\Concerns\HasPlatformUuids;
 use Envor\Platform\Concerns\UsesPlatformConnection;
-use Illuminate\Database\Eloquent\Model;
 
 trait HasDatastoreDriver
 {
     use HasPlatformUuids;
     use UsesPlatformConnection;
+
+    public const DEFAULT_DRIVER = Driver::SQLite;
 
     public function owner()
     {
@@ -20,9 +21,11 @@ trait HasDatastoreDriver
 
     protected static function bootHasDatastoreDriver()
     {
-        static::created(function (Model $model) {
-            $model->driver = $model->driver ?? Driver::SQLite;
-
+        static::created(function (self $model) {
+            if(!$model->driver){
+                $model->driver = $model::DEFAULT_DRIVER;
+                $model->save();
+            }
             $model->createDatabase()->migrate();
         });
     }
