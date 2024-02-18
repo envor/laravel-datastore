@@ -93,7 +93,6 @@ config('database.connections.mydb');
     public function create(array $input): User
     {
         $create = function () use ($input) {
-
             Validator::make($input, [
                 'name' => ['required', 'string', 'max:255'],
                 'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
