@@ -5,6 +5,7 @@ namespace Envor\Datastore;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -16,13 +17,15 @@ abstract class Datastore
 
     public ?string $migratePath = null;
 
-    public ?OutputInterface $output = null;
+    public ?OutputInterface $buffer = null;
 
     public array $migrateOptions = [];
 
     public array $config = [];
 
     public array $adminConfig = [];
+
+    public mixed $result = null;
 
     protected bool $prefixed = false;
 
@@ -73,23 +76,57 @@ abstract class Datastore
     {
         $this->pushConfig();
 
-        app(DatabaseManager::class)->setDefaultConnection($this->connection);
-
         return $this;
+    }
+
+    protected function cachePreviousDefault(): void
+    {
+        $key = config('database.default');
+        $config = config("database.connections.{$key}");
+
+        cache()->forever('previous_default_database', [
+            'key' => $key,
+            'config' => $config,
+        ]);
+    }
+
+    protected function popConfig(): void
+    {
+        $this->restorePreviousDefault();
+    }
+
+    protected function restorePreviousDefault(): void
+    {
+        $previous = cache()->get('previous_default_database');
+
+        config([
+            "database.connections.{$previous['key']}" => $previous['config'],
+            'database.default' => $previous['key'],
+        ]);
     }
 
     protected function pushConfig(): void
     {
+        $this->cachePreviousDefault();
+
         config([
             "database.connections.{$this->connection}" => $this->config,
+            'database.default' => $this->connection,
         ]);
     }
 
-    public function run(?callable $callback = null): mixed
+    public function run(?callable $callback): mixed
     {
         $this->pushConfig();
+        $this->result = $callback();
+        $this->popConfig();
 
-        return app(DatabaseManager::class)->usingConnection($this->connection, $callback);
+        return $this;
+    }
+
+    public function return(): mixed
+    {
+        return $this->result;
     }
 
     public function migratePath(string $path): static
@@ -116,9 +153,9 @@ abstract class Datastore
         return $this;
     }
 
-    public function output(OutputInterface $output): static
+    public function buffer(OutputInterface $buffer): static
     {
-        $this->output = $output;
+        $this->buffer = $buffer;
 
         return $this;
     }
@@ -143,9 +180,20 @@ abstract class Datastore
 
         $options = Arr::except($options, '--fresh');
 
-        Artisan::call($command, $options, $this->output);
+        Artisan::call($command, $options, $this->buffer);
 
         return Artisan::output();
+    }
+
+    public function disconnect(): static
+    {
+        app(DatabaseManager::class)->purge($this->connection);
+        app(DatabaseManager::class)->purge($this->adminConnection);
+
+        DB::disconnect($this->connection);
+        DB::disconnect($this->adminConnection);
+
+        return $this;
     }
 
     protected function createDatabase(): bool

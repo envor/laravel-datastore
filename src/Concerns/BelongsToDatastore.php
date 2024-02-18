@@ -9,8 +9,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 trait BelongsToDatastore
 {
-    use HasPlatformUuids;
-    use UsesPlatformConnection;
 
     public ?string $datastore_driver = null;
 
