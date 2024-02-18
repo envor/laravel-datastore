@@ -55,7 +55,7 @@ $sqlite->name;
 
 // ...storage/app/datastore/mydb.sqlite
 
-$sqlite->connectionName;
+$sqlite->connection;
 
 // mydb
 
@@ -82,6 +82,57 @@ config('database.connections.mydb');
 //     "foreign_key_constraints" => true,
 //     "name" => "mydb",
 // ]
+```
+
+```php
+    /**
+     * Create a newly registered user.
+     *
+     * @param  array<string, string>  $input
+     */
+    public function create(array $input): User
+    {
+        $create = function () use ($input) {
+
+            Validator::make($input, [
+                'name' => ['required', 'string', 'max:255'],
+                'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+                'password' => $this->passwordRules(),
+                'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '',
+            ])->validate();
+
+            return DB::transaction(function () use ($input) {
+                return tap(User::create([
+                    'name' => $input['name'],
+                    'email' => $input['email'],
+                    'password' => Hash::make($input['password']),
+                ]), function (User $user) {
+                    $this->createTeam($user);
+                });
+            });
+        };
+
+        SQLite::make(database_path('my_backup.sqlite'))
+            ->create()
+            ->migratePath('database/migrations/platform')
+            ->migrate()
+            ->run($create)
+            ->disconnect();
+            
+        MariaDB::make('backup')
+            ->create()
+            ->migratePath('database/migrations/platform')
+            ->migrate()
+            ->run($create)
+            ->disconnect();
+
+        return MariaDB::make('datastore')
+            ->create()
+            ->migratePath('database/migrations/platform')
+            ->migrate()
+            ->run($create)
+            ->return();
+    }
 ```
 
 ## Testing
