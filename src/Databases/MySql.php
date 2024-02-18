@@ -6,11 +6,11 @@ use Envor\Datastore\Datastore;
 
 class MySql extends Datastore
 {
-    protected function makeAdminConfig(): array
+    protected static function makeAdminConfig(Datastore $datastore): array
     {
         $config = config('database.connections.mysql');
 
-        $config['name'] = $this->adminName;
+        $config['name'] = $datastore->adminConnection;
 
         return $config;
     }

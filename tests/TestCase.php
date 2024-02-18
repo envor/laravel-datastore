@@ -30,8 +30,7 @@ class TestCase extends Orchestra
     {
         config()->set('database.platform', 'testing');
 
-        $migration = include __DIR__.'/../database/migrations/create_datastores_table.php.stub';
+        $migration = include __DIR__.'/../database/migrations/platform/create_datastores_table.php.stub';
         $migration->up();
-
     }
 }

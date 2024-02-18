@@ -3,7 +3,7 @@
 namespace Envor\Datastore;
 
 use Envor\Datastore\Commands\DatastoreCommand;
-use Envor\Datastore\Databases\SQLite;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Event;
 use Laravel\Octane\Events\RequestTerminated;
 use Spatie\LaravelPackageTools\Package;
@@ -22,18 +22,22 @@ class DatastoreServiceProvider extends PackageServiceProvider
             ->name('laravel-datastore')
             ->hasConfigFile()
             ->hasViews()
-            ->hasMigration('create_laravel-datastore_table')
+            ->hasMigrations(['platform/create_datastores_table', 'platform/create_teams_table'])
             ->hasCommand(DatastoreCommand::class);
     }
 
     public function packageBooted()
     {
 
-        if (! isset($_SERVER['LARAVEL_OCTANE'])) {
+        // if (! isset($_SERVER['LARAVEL_OCTANE'])) {
 
-            return;
-        }
+        //     return;
+        // }
 
-        Event::listen(fn (RequestTerminated $requestTerminated) => (new SQLite(':memory:'))->cleanup());
+        // Event::listen(function (RequestTerminated $requestTerminated) {
+        //     $configs = app('db.memory')->table('datastores')->pluck('name')->toArray();
+
+        //     config(['database.connections' => Arr::except(config('database.connections'), $configs)]);
+        // });
     }
 }

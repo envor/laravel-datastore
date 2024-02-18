@@ -6,12 +6,12 @@ use Envor\Datastore\Datastore;
 
 class MariaDB extends Datastore
 {
-    protected function makeAdminConfig(): array
+    protected static function makeAdminConfig(Datastore $datastore): array
     {
-        $database = config('database.connections.mariadb');
+        $config = config('database.connections.mariadb');
 
-        $database['name'] = $this->adminName;
+        $config['name'] = $datastore->adminConnection;
 
-        return $database;
+        return $config;
     }
 }
