@@ -7,7 +7,6 @@ use Envor\Datastore\Driver;
 
 trait HasDatastoreDriver
 {
-
     public const DEFAULT_DRIVER = Driver::SQLite;
 
     public function owner()
