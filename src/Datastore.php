@@ -44,7 +44,7 @@ abstract class Datastore
 
     public static function faking()
     {
-        if(app()->has('datastore_faking')) {
+        if (app()->has('datastore_faking')) {
             return true;
         }
 
@@ -220,8 +220,8 @@ abstract class Datastore
 
     protected function createDatabase(): bool
     {
-        
-        if($this->faking() || $this->name === ':memory:') {
+
+        if ($this->faking() || $this->name === ':memory:') {
             return true;
         }
 
@@ -273,7 +273,7 @@ abstract class Datastore
 
     protected static function makeAdminConnection(string $name): string
     {
-        if(static::faking()) {
+        if (static::faking()) {
             return config('database.default');
         }
 
