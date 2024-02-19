@@ -51,7 +51,7 @@ abstract class Datastore
         return config('datastore.creates_databases', false);
     }
 
-    private function __construct(private string $name, protected ?string $prefix = null)
+    private function __construct(public string $name, protected ?string $prefix = null)
     {
         static::booting($name, $this, $prefix);
         static::boot($name, $this, $prefix);
@@ -220,8 +220,8 @@ abstract class Datastore
 
     protected function createDatabase(): bool
     {
-
-        if ($this->faking()) {
+        
+        if($this->faking() || $this->name === ':memory:') {
             return true;
         }
 
