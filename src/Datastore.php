@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Symfony\Component\Console\Output\OutputInterface;
+use WeakMap;
 
 abstract class Datastore
 {
@@ -28,6 +29,27 @@ abstract class Datastore
     public mixed $result = null;
 
     protected bool $prefixed = false;
+
+    public static function fake()
+    {
+        app()->instance('datastore_faking', new WeakMap([
+            'faking' => true,
+        ]));
+    }
+
+    public static function stopFaking()
+    {
+        app()->forgetInstance('datastore_faking');
+    }
+
+    public static function faking()
+    {
+        if(app()->has('datastore_faking')) {
+            return true;
+        }
+
+        return config('datastore.creates_databases', false);
+    }
 
     private function __construct(private string $name, protected ?string $prefix = null)
     {
@@ -198,6 +220,11 @@ abstract class Datastore
 
     protected function createDatabase(): bool
     {
+
+        if ($this->faking()) {
+            return true;
+        }
+
         $this->pushAdminConfig();
 
         return (bool) app(DatabaseManager::class)->usingConnection($this->adminConnection,
@@ -214,15 +241,18 @@ abstract class Datastore
 
     protected static function boot(string $name, Datastore $datastore): void
     {
-        $datastore->name = static::makeName($name);
+        $datastore->name = static::makeNameIfNotFaking($name);
         $datastore->connection = static::makeConnection($name);
         $datastore->adminConnection = static::makeAdminConnection($name);
-        $datastore->adminConfig = static::makeAdminConfig($datastore);
+        $datastore->adminConfig = static::makeAdminConfigIfNotFaking($datastore);
         $datastore->config = static::makeConfig($datastore);
     }
 
     protected static function makeConfig(Datastore $datastore): array
     {
+        if (static::faking()) {
+            return config('database.connections.'.config('database.default'));
+        }
 
         return array_merge($datastore->adminConfig, [
             'name' => $datastore->connection,
@@ -230,16 +260,44 @@ abstract class Datastore
         ]);
     }
 
+    protected static function makeAdminConfigIfNotFaking(Datastore $datastore): array
+    {
+        if (static::faking()) {
+            return config('database.connections.'.config('database.default'));
+        }
+
+        return static::makeAdminConfig($datastore);
+    }
+
     abstract protected static function makeAdminConfig(Datastore $datastore): array;
 
     protected static function makeAdminConnection(string $name): string
     {
+        if(static::faking()) {
+            return config('database.default');
+        }
+
         return 'datastore_admin_'.$name;
     }
 
     protected static function makeConnection(string $name): string
     {
+        if (static::faking()) {
+            config('database.default');
+        }
+
         return $name;
+    }
+
+    protected static function makeNameIfNotFaking(string $name): string
+    {
+        if (static::faking()) {
+            $default = config('database.default');
+
+            return config("database.connections.{$default}.database");
+        }
+
+        return static::makeName($name);
     }
 
     protected static function makeName(string $name): string

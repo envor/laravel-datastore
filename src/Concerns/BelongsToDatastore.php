@@ -2,14 +2,11 @@
 
 namespace Envor\Datastore\Concerns;
 
-use Envor\Platform\Concerns\HasPlatformUuids;
-use Envor\Platform\Concerns\UsesPlatformConnection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 trait BelongsToDatastore
 {
-
     public ?string $datastore_driver = null;
 
     public static function bootBelongsToDatastore()
