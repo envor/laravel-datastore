@@ -222,6 +222,7 @@ abstract class Datastore
     {
 
         if ($this->faking() || $this->name === ':memory:') {
+
             return true;
         }
 
