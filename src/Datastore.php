@@ -198,8 +198,8 @@ abstract class Datastore
 
     protected function createDatabase(): bool
     {
-        
-        if($this->name === ':memory:') {
+
+        if ($this->name === ':memory:') {
             return true;
         }
 
