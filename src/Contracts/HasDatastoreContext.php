@@ -4,5 +4,5 @@ namespace Envor\Datastore\Contracts;
 
 interface HasDatastoreContext
 {
-    public function datastoreContext() : ?ConfiguresDatastore;
+    public function datastoreContext(): ?ConfiguresDatastore;
 }

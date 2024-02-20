@@ -4,7 +4,6 @@ namespace Envor\Datastore\Tests\Fixtures;
 
 use Envor\Datastore\Contracts\ConfiguresDatastore;
 use Envor\Datastore\Contracts\HasDatastoreContext;
-use Envor\Datastore\Tests\Fixtures\Team;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -29,5 +28,4 @@ class User extends Authenticatable implements HasDatastoreContext
 
         return $this->belongsTo(Team::class, 'current_team_id');
     }
-
 }

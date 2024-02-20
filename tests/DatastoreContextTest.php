@@ -13,7 +13,7 @@ beforeEach(function () {
     Datastore::configureDatastoreContextUsing(DatastoreContext::class);
 
     Schema::connection(config('database.platform'))->create('users', function (Blueprint $table) {
-        $table->id();  
+        $table->id();
         $table->string('name');
         $table->string('email')->unique();
         $table->timestamp('email_verified_at')->nullable();
@@ -50,15 +50,15 @@ it('can configure a datastore using context', function () {
         'current_team_id' => $this->team->id,
     ]);
 
-   $this->actingAs($user);
+    $this->actingAs($user);
 
-   $context = app(HasDatastoreContext::class)->datastoreContext();
+    $context = app(HasDatastoreContext::class)->datastoreContext();
 
-   $context->configure();
+    $context->configure();
 
-   expect(config('database.default'))->toBe($this->datastore->database()->name);
+    expect(config('database.default'))->toBe($this->datastore->database()->name);
 
-   expect(config("database.connections.{$this->datastore->database()->name}"))->toBe($this->datastore->database()->config);
+    expect(config("database.connections.{$this->datastore->database()->name}"))->toBe($this->datastore->database()->config);
 });
 
 test('the middleware in isolation', function () {

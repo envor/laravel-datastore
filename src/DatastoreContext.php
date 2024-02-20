@@ -7,13 +7,13 @@ class DatastoreContext implements Contracts\HasDatastoreContext
     public function datastoreContext(): ?Contracts\ConfiguresDatastore
     {
 
-        if(! auth()->check() && ! request()->user()) {
+        if (! auth()->check() && ! request()->user()) {
             return null;
         }
 
         $auth = auth()->user() ?? request()->user();
 
-        if(! method_exists($auth, 'datastoreContext')) {
+        if (! method_exists($auth, 'datastoreContext')) {
             return null;
         }
 
