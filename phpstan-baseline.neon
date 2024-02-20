@@ -92,7 +92,7 @@ parameters:
 
 		-
 			message: "#^Undefined variable\\: \\$this$#"
-			count: 15
+			count: 16
 			path: tests/DatastoreContextTest.php
 
 		-

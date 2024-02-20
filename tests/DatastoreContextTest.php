@@ -80,6 +80,8 @@ test('the middleware in isolation', function () {
 
 test('the middleware in full app', function () {
 
+    $this->withoutExceptionHandling();
+
     $this->get('/datastore-context')->assertOk();
 
     $user = User::factory()->create([
