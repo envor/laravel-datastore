@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 trait HasDatastores
 {
-    public function datastores() : MorphMany
+    public function datastores(): MorphMany
     {
         return $this->morphMany(Datastore::class, 'owner');
     }

@@ -10,5 +10,5 @@ interface ConfiguresDatastore
 
     public function use();
 
-    public function database() : ?Datastore;
+    public function database(): ?Datastore;
 }
