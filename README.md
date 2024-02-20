@@ -141,10 +141,10 @@ You can use the 'datastore.context' middleware to get the app to behave in the c
 
 ```php
 
-Route::get('/contexed', fn() => return 'OK')->middleware('datastore.context');
+Route::get('/contexed', fn() => 'OK')->middleware('datastore.context');
 
 // or
-Route::get('/contexed', fn() => return 'OK')->middleware(\Envor\Datastore\DatastoreContextMiddleware::class);
+Route::get('/contexed', fn() => 'OK')->middleware(\Envor\Datastore\DatastoreContextMiddleware::class);
 
 // will use the authenticated user to configure a database
 
