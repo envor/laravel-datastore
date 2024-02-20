@@ -6,19 +6,20 @@ use Illuminate\Contracts\Filesystem\Factory;
 
 class DatabaseFactory
 {
-    public static function newDatabase(string $name, string $driver, $disk = 'local')
+    /**
+    * Create a new database instance.
+     */
+    public static function newDatabase(string $name, string $driver, $disk = 'local') : Datastore
     {
-        $datastore = match ($driver) {
+        return match ($driver) {
             'sqlite' => static::prefixedSqlite($name, $disk),
             'mariadb' => Databases\MariaDB::withPrefix($name, 'datastore'),
             'mysql' => Databases\MySql::withPrefix($name, 'datastore'),
             default => throw new \Exception("Driver {$driver} not supported"),
         };
-
-        return $datastore;
     }
 
-    protected static function prefixedSqlite(string $name, $disk = 'local')
+    protected static function prefixedSqlite(string $name, $disk = 'local') : Databases\SQLite
     {
         if ($name === ':memory:') {
             return Databases\SQLite::make($name);
