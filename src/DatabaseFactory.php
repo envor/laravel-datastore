@@ -7,7 +7,7 @@ use Illuminate\Contracts\Filesystem\Factory;
 class DatabaseFactory
 {
     /**
-    * Create a new database instance.
+    * Create a new database instance with the given name and driver.
      */
     public static function newDatabase(string $name, string $driver, $disk = 'local') : Datastore
     {
