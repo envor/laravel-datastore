@@ -22,7 +22,7 @@ class TeamFactory extends Factory
     {
         return [
             'name' => $this->faker->name,
-            'uuid' => $this->faker->uuid,
+            'datastore_id' => \Envor\Datastore\Tests\Fixtures\Datastore::factory(),
         ];
     }
 }

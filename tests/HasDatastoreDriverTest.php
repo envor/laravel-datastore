@@ -1,6 +1,5 @@
 <?php
 
-use Envor\Datastore\Contracts\ConfiguresDatastore;
 use Envor\Datastore\Models\Datastore;
 use Illuminate\Support\Facades\Schema;
 
@@ -10,7 +9,7 @@ it('will configure the datastore', function () {
 
     $datastore = $datastoreModel::factory()->create();
 
-    app(ConfiguresDatastore::class)::first()->configure();
+    $datastore->configure();
 
     expect(config('database.default'))->toBe($datastore->database()->name);
 
@@ -23,7 +22,7 @@ it('will create and migrate the datastore', function () {
 
     $datastore = $datastoreModel::factory()->create();
 
-    app(ConfiguresDatastore::class)::first()->migrate();
+    $datastore->migrate();
 
     expect(Schema::connection($datastore->database()->name)->hasTable('migrations'))->toBeTrue();
 });
