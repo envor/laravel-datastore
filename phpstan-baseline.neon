@@ -46,6 +46,31 @@ parameters:
 			path: src/Datastore.php
 
 		-
+			message: "#^PHPDoc tag @param references unknown parameter\\: \\$guards$#"
+			count: 1
+			path: src/DatastoreContextMiddleware.php
+
+		-
+			message: "#^Call to method aliasMiddleware\\(\\) on an unknown class Envor\\\\Datastore\\\\Router\\.$#"
+			count: 1
+			path: src/DatastoreServiceProvider.php
+
+		-
+			message: "#^Call to method pushMiddlewareToGroup\\(\\) on an unknown class Envor\\\\Datastore\\\\Router\\.$#"
+			count: 1
+			path: src/DatastoreServiceProvider.php
+
+		-
+			message: "#^PHPDoc tag @var for variable \\$router contains unknown class Envor\\\\Datastore\\\\Router\\.$#"
+			count: 1
+			path: src/DatastoreServiceProvider.php
+
+		-
+			message: "#^Static method Illuminate\\\\Support\\\\Arr\\:\\:except\\(\\) invoked with 3 parameters, 2 required\\.$#"
+			count: 1
+			path: src/DatastoreServiceProvider.php
+
+		-
 			message: "#^Access to an undefined property Envor\\\\Datastore\\\\Models\\\\Datastore\\:\\:\\$driver\\.$#"
 			count: 2
 			path: src/Models/Datastore.php
@@ -61,6 +86,16 @@ parameters:
 			path: tests/ArchTest.php
 
 		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Collection\\<int, Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\|Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$id\\.$#"
+			count: 1
+			path: tests/DatastoreContextTest.php
+
+		-
+			message: "#^Undefined variable\\: \\$this$#"
+			count: 16
+			path: tests/DatastoreContextTest.php
+
+		-
 			message: "#^Access to an undefined property Envor\\\\Datastore\\\\Tests\\\\Fixtures\\\\Datastore\\:\\:\\$driver\\.$#"
 			count: 2
 			path: tests/Fixtures/Datastore.php
@@ -72,7 +107,7 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Envor\\\\Datastore\\\\Tests\\\\Fixtures\\\\Team\\:\\:\\$datastore\\.$#"
-			count: 3
+			count: 4
 			path: tests/Fixtures/Team.php
 
 		-
@@ -84,6 +119,11 @@ parameters:
 			message: "#^Access to an undefined property Envor\\\\Datastore\\\\Tests\\\\Fixtures\\\\Team\\:\\:\\$user_id\\.$#"
 			count: 1
 			path: tests/Fixtures/Team.php
+
+		-
+			message: "#^Access to an undefined property Envor\\\\Datastore\\\\Tests\\\\Fixtures\\\\User\\:\\:\\$currentTeam\\.$#"
+			count: 1
+			path: tests/Fixtures/User.php
 
 		-
 			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Collection\\<int, Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\|Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:configure\\(\\)\\.$#"

@@ -33,6 +33,7 @@ This is the contents of the published config file:
 ```php
 return [
     'model' => \Envor\Datastore\Models\Datastore::class,
+    'create_databases' => env('DATASTORE_CREATE_DATABASES', true),
 ];
 ```
 
@@ -132,6 +133,61 @@ config('database.connections.mydb');
             ->run($create)
             ->return();
     }
+```
+
+## Middleware
+
+You can use the 'datastore.context' middleware to get the app to behave in the context of the current datastore;
+
+```php
+
+Route::get('/contexed', fn() => 'OK')->middleware('datastore.context');
+
+// or
+Route::get('/contexed', fn() => 'OK')->middleware(\Envor\Datastore\DatastoreContextMiddleware::class);
+
+// will use the authenticated user to configure a database
+
+```
+
+Your user must implement the `HasDatastoreContext interface in order for this to work.
+
+```php
+...
+use Envor\Datastore\Concerns\BelongsToDatastore;
+use Envor\Datastore\Contracts\ConfiguresDatastore;
+use Envor\Datastore\Contracts\HasDatastoreContext;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+
+class User extends Authenticatable implements HasDatastoreContext
+{
+    use BelongsToDatastore;
+
+    public function datastoreContext(): ?ConfiguresDatastore
+    {
+        return $this->datastore;
+    }
+}
+```
+
+Here are the relevant interfaces:
+
+```php
+
+interface HasDatastoreContext
+{
+    public function datastoreContext(): ?ConfiguresDatastore;
+}
+
+
+interface ConfiguresDatastore
+{
+    public function configure();
+
+    public function use();
+
+    public function database(): ?\Envor\Datastore\Datastore;
+}
 ```
 
 ## Testing
