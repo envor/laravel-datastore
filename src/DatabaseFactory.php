@@ -7,9 +7,9 @@ use Illuminate\Contracts\Filesystem\Factory;
 class DatabaseFactory
 {
     /**
-    * Create a new database instance.
+     * Create a new database instance.
      */
-    public static function newDatabase(string $name, string $driver, $disk = 'local') : Datastore
+    public static function newDatabase(string $name, string $driver, $disk = 'local'): Datastore
     {
         return match ($driver) {
             'sqlite' => static::prefixedSqlite($name, $disk),
@@ -19,7 +19,7 @@ class DatabaseFactory
         };
     }
 
-    protected static function prefixedSqlite(string $name, $disk = 'local') : Databases\SQLite
+    protected static function prefixedSqlite(string $name, $disk = 'local'): Databases\SQLite
     {
         if ($name === ':memory:') {
             return Databases\SQLite::make($name);
