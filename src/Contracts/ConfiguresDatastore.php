@@ -4,7 +4,7 @@ namespace Envor\Datastore\Contracts;
 
 use Envor\Datastore\Datastore;
 
-interface ConfiguresDatastores
+interface ConfiguresDatastore
 {
     public function configure();
 

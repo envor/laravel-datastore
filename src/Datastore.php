@@ -2,7 +2,7 @@
 
 namespace Envor\Datastore;
 
-use Envor\Datastore\Contracts\ConfiguresDatastores;
+use Envor\Datastore\Contracts\ConfiguresDatastore;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Artisan;
@@ -33,7 +33,7 @@ abstract class Datastore
 
     public static function configureDatastoresUsing(string $class): void
     {
-        app()->singleton(ConfiguresDatastores::class, $class);
+        app()->singleton(ConfiguresDatastore::class, $class);
     }
 
     public static function fake()
