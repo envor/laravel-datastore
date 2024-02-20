@@ -3,9 +3,6 @@
 namespace Envor\Datastore;
 
 use Envor\Datastore\Commands\DatastoreCommand;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Event;
-use Laravel\Octane\Events\RequestTerminated;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -28,16 +25,6 @@ class DatastoreServiceProvider extends PackageServiceProvider
 
     public function packageBooted()
     {
-
-        // if (! isset($_SERVER['LARAVEL_OCTANE'])) {
-
-        //     return;
-        // }
-
-        // Event::listen(function (RequestTerminated $requestTerminated) {
-        //     $configs = app('db.memory')->table('datastores')->pluck('name')->toArray();
-
-        //     config(['database.connections' => Arr::except(config('database.connections'), $configs)]);
-        // });
+        Datastore::configureDatastoresUsing(Models\Datastore::class);
     }
 }

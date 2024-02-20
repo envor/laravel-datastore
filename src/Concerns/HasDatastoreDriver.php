@@ -59,7 +59,7 @@ trait HasDatastoreDriver
         return $this;
     }
 
-    public function database(): Datastore
+    public function database(): ?Datastore
     {
         return $this->driver->toNewDatabase($this->name);
     }

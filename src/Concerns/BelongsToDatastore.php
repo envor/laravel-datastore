@@ -2,6 +2,7 @@
 
 namespace Envor\Datastore\Concerns;
 
+use Envor\Datastore\Datastore;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -33,9 +34,12 @@ trait BelongsToDatastore
             $attributes['owner_id'] = $this->user_id;
         }
 
-        // dd($attributes, $model::create($attributes));
-
         return $model::create($attributes);
+    }
+
+    public function database(): ?Datastore
+    {
+        return $this->datastore?->database();
     }
 
     public function datastore(): BelongsTo
@@ -76,29 +80,21 @@ trait BelongsToDatastore
 
     protected function used()
     {
-        //
-
         return $this;
     }
 
     protected function configured()
     {
-        //
-
         return $this;
     }
 
     protected function using()
     {
-        //
-
         return $this;
     }
 
     protected function configuring()
     {
-        //
-
         return $this;
     }
 }

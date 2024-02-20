@@ -3,13 +3,14 @@
 namespace Envor\Datastore\Models;
 
 use Envor\Datastore\Concerns\HasDatastoreDriver;
+use Envor\Datastore\Contracts\ConfiguresDatastores;
 use Envor\Datastore\Driver;
 use Envor\Platform\Concerns\HasPlatformUuids;
 use Envor\Platform\Concerns\UsesPlatformConnection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Datastore extends Model
+class Datastore extends Model implements ConfiguresDatastores
 {
     use HasDatastoreDriver;
     use HasFactory;
