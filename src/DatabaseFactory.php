@@ -6,11 +6,22 @@ use Illuminate\Contracts\Filesystem\Factory;
 
 class DatabaseFactory
 {
+
+    public static function cleanupRepository(): void
+    {
+        $frameworkConnections = require base_path('vendor/laravel/framework/config/database.php'); ['connections'];
+        $appConnections = require config_path('database.php'); ['connections'];
+
+        config(['database.connections' => array_merge($frameworkConnections, $appConnections)]);
+    }
+
     /**
     * Create a new database instance with the given name and driver.
      */
     public static function newDatabase(string $name, string $driver, $disk = 'local'): Datastore
     {
+        // static::cleanupRepository();
+
         return match ($driver) {
             'sqlite' => static::prefixedSqlite($name, $disk),
             'mariadb' => Databases\MariaDB::withPrefix($name, 'datastore'),
