@@ -163,7 +163,7 @@ class User extends Authenticatable implements HasDatastoreContext
 {
     use BelongsToDatastore;
 
-    public function datastoreContext(): ?ConfiguresDatastore
+    public function datastoreContext(): ?ConfiguresDatastore;
     {
         return $this->datastore;
     }
