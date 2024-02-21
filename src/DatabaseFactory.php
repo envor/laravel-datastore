@@ -19,7 +19,6 @@ class DatabaseFactory
      */
     public static function newDatabase(string $name, string $driver, $disk = 'local'): Datastore
     {
-
         return match ($driver) {
             'sqlite' => static::prefixedSqlite($name, $disk),
             'mariadb' => Databases\MariaDB::withPrefix($name, 'datastore'),

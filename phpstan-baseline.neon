@@ -26,6 +26,11 @@ parameters:
 			path: src/Datastore.php
 
 		-
+			message: "#^Result of method Illuminate\\\\Database\\\\Schema\\\\Builder\\:\\:create\\(\\) \\(void\\) is used\\.$#"
+			count: 1
+			path: src/Datastore.php
+
+		-
 			message: "#^Static method Envor\\\\Datastore\\\\Datastore\\:\\:boot\\(\\) invoked with 3 parameters, 2 required\\.$#"
 			count: 1
 			path: src/Datastore.php
