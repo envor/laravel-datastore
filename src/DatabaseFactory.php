@@ -20,7 +20,6 @@ class DatabaseFactory
      */
     public static function newDatabase(string $name, string $driver, $disk = 'local'): Datastore
     {
-        // static::cleanupRepository();
 
         return match ($driver) {
             'sqlite' => static::prefixedSqlite($name, $disk),
