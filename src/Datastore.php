@@ -4,8 +4,12 @@ namespace Envor\Datastore;
 
 use Envor\Datastore\Contracts\ConfiguresDatastore;
 use Envor\Datastore\Contracts\HasDatastoreContext;
+use Illuminate\Database\Connection;
 use Illuminate\Database\DatabaseManager;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Schema\Builder;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
@@ -28,7 +32,7 @@ abstract class Datastore
 
     public array $adminConfig = [];
 
-    public mixed $result = null;
+    protected mixed $result = null;
 
     protected bool $prefixed = false;
 
@@ -158,9 +162,9 @@ abstract class Datastore
         return $this;
     }
 
-    public function return(): mixed
+    public function return(?callable $callback): mixed
     {
-        return $this->result;
+        return isset($callback) ? $callback($this->result) : $this->result;
     }
 
     public function migratePath(string $path): static
@@ -259,6 +263,39 @@ abstract class Datastore
         $datastore->adminConnection = static::makeAdminConnection($name);
         $datastore->adminConfig = static::makeAdminConfigIfNotFaking($datastore);
         $datastore->config = static::makeConfig($datastore);
+    }
+
+    public function schema(): ?Builder
+    {
+        if ($this->exists()) {
+            return Schema::connection($this->connection);
+        }
+
+        return Schema::connection($this->adminConnection);
+    }
+
+    public function createTable(string $table, callable $callback): static
+    {
+        if ($this->schema()->hasTable($table)) {
+            return $this;
+        }
+        $this->result = $this->schema()->create($table, fn (Blueprint $table) => $callback($table));
+
+        return $this;
+    }
+
+    public function tables(): ?Collection
+    {
+        return collect($this->schema()?->getTables());
+    }
+
+    public function db(): ?Connection
+    {
+        if ($this->exists()) {
+            return DB::connection($this->connection);
+        }
+
+        return DB::connection($this->adminConnection);
     }
 
     protected static function makeConfig(Datastore $datastore): array

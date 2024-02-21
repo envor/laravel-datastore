@@ -27,6 +27,8 @@ class DatastoreServiceProvider extends PackageServiceProvider
 
     public function packageBooted()
     {
+        $this->app->terminating(fn () => DatabaseFactory::cleanupRepository());
+
         Datastore::configureDatastoreContextUsing(DatastoreContext::class);
 
         $this->app->booted(function () {
