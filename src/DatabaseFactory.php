@@ -8,8 +8,9 @@ class DatabaseFactory
 {
     public static function cleanupRepository(): void
     {
-        $frameworkConnections = require base_path('vendor/laravel/framework/config/database.php'); ['connections'];
-        $appConnections =  file_exists(config_path('database.php')) ? require config_path('database.php') : [];
+        $frameworkConnections = require base_path('vendor/laravel/framework/config/database.php');
+        ['connections'];
+        $appConnections = file_exists(config_path('database.php')) ? require config_path('database.php') : [];
 
         config(['database.connections' => array_merge($frameworkConnections, $appConnections)]);
     }
