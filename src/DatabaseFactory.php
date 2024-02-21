@@ -6,11 +6,12 @@ use Illuminate\Contracts\Filesystem\Factory;
 
 class DatabaseFactory
 {
-
     public static function cleanupRepository(): void
     {
-        $frameworkConnections = require base_path('vendor/laravel/framework/config/database.php'); ['connections'];
-        $appConnections = require config_path('database.php'); ['connections'];
+        $frameworkConnections = require base_path('vendor/laravel/framework/config/database.php');
+        ['connections'];
+        $appConnections = require config_path('database.php');
+        ['connections'];
 
         config(['database.connections' => array_merge($frameworkConnections, $appConnections)]);
     }

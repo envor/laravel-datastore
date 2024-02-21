@@ -6,7 +6,6 @@ use Envor\Datastore\Contracts\ConfiguresDatastore;
 use Envor\Datastore\Contracts\HasDatastoreContext;
 use Illuminate\Database\Connection;
 use Illuminate\Database\DatabaseManager;
-use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Schema\Builder;
 use Illuminate\Support\Arr;
@@ -19,7 +18,6 @@ use WeakMap;
 
 abstract class Datastore
 {
-
     public ?string $connection = null;
 
     public ?string $adminConnection = null;
@@ -278,7 +276,7 @@ abstract class Datastore
 
     public function createTable(string $table, callable $callback): static
     {
-        if($this->schema()->hasTable($table)){
+        if ($this->schema()->hasTable($table)) {
             return $this;
         }
         $this->result = $this->schema()->create($table, fn (Blueprint $table) => $callback($table));
