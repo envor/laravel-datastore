@@ -16,7 +16,7 @@ class DatabaseFactory
     }
 
     /**
-    * Create a new database instance with the given name and driver.
+     * Create a new database instance with the given name and driver.
      */
     public static function newDatabase(string $name, string $driver, $disk = 'local'): Datastore
     {
