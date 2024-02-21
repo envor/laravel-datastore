@@ -173,7 +173,7 @@ Here are the relevant interfaces:
 
 interface HasDatastoreContext
 {
-    public function datastoreContext(): ?ConfiguresDatastore;
+    public function datastoreContext(): ?\Envor\Datastore\Contracts\ConfiguresDatastore;
 }
 
 
