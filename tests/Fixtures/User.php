@@ -10,8 +10,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable implements HasDatastoreContext
 {
-    use HasFactory;
     use HasDatastores;
+    use HasFactory;
 
     protected $guarded = [];
 
