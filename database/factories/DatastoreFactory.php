@@ -22,8 +22,8 @@ class DatastoreFactory extends Factory
     public function definition()
     {
         return [
-            'uuid' => $this->faker->uuid,
-            'name' => ':memory:',
+            'uuid' => str()->ulid(),
+            'name' => ':memory:'.str()->ulid(),
             'driver' => Driver::SQLite,
         ];
     }
