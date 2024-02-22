@@ -13,12 +13,12 @@ beforeEach(function () {
     $this->team = \Envor\Datastore\Tests\Fixtures\Team::factory()->create([
         'user_id' => $user->id,
     ]);
-    
+
     $this->datastore = \Envor\Datastore\Models\Datastore::factory()->create([
         'owner_id' => $user->id,
         'owner_type' => User::class,
     ]);
-    
+
     $user->update([
         'current_team_id' => $this->team->id,
     ]);

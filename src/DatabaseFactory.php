@@ -10,7 +10,7 @@ class DatabaseFactory
     public static function cleanupRepository(): void
     {
         $prefixedConnections = collect(config('database.connections'))
-            ->filter(fn ($_, $name) => str_starts_with($name, 'datastore')||str_starts_with($name, 'datastore_admin'))
+            ->filter(fn ($_, $name) => str_starts_with($name, 'datastore') || str_starts_with($name, 'datastore_admin'))
             ->keys()
             ->toArray();
 

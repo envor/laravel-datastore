@@ -6,8 +6,6 @@ use Envor\Datastore\DatastoreContext;
 use Envor\Datastore\Models\Datastore as DatastoreModel;
 use Envor\Datastore\Tests\Fixtures\Team;
 use Envor\Datastore\Tests\Fixtures\User;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
 beforeEach(function () {
     Datastore::configureDatastoreContextUsing(DatastoreContext::class);
