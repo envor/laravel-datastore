@@ -154,16 +154,13 @@ Your user must implement the `HasDatastoreContext interface in order for this to
 
 ```php
 ...
-use Envor\Datastore\Concerns\BelongsToDatastore;
-use Envor\Datastore\Contracts\ConfiguresDatastore;
-use Envor\Datastore\Contracts\HasDatastoreContext;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Authenticatable implements HasDatastoreContext
+class User extends Authenticatable implements \Envor\Datastore\Contracts\HasDatastoreContex
 {
-    use BelongsToDatastore;
+    use \Envor\Datastore\Concerns\BelongsToDatastore
 
-    public function datastoreContext(): ?ConfiguresDatastore
+    public function datastoreContext(): \Envor\Datastore\Contracts\ConfiguresDatastore;
     {
         return $this->datastore;
     }
@@ -176,7 +173,7 @@ Here are the relevant interfaces:
 
 interface HasDatastoreContext
 {
-    public function datastoreContext(): ?ConfiguresDatastore;
+    public function datastoreContext(): ?\Envor\Datastore\Contracts\ConfiguresDatastore;
 }
 
 

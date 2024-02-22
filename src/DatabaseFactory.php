@@ -3,15 +3,18 @@
 namespace Envor\Datastore;
 
 use Illuminate\Contracts\Filesystem\Factory;
+use Illuminate\Support\Arr;
 
 class DatabaseFactory
 {
     public static function cleanupRepository(): void
     {
-        $frameworkConnections = (require base_path('vendor/laravel/framework/config/database.php'))['connections'];
-        $appConnections = file_exists(config_path('database.php')) ? (require config_path('database.php'))['connections'] : [];
+        $prefixedConnections = collect(config('database.connections'))
+            ->filter(fn ($_, $name) => str_starts_with($name, 'datastore') || str_starts_with($name, 'datastore_admin'))
+            ->keys()
+            ->toArray();
 
-        config(['database.connections' => array_merge($frameworkConnections, $appConnections)]);
+        config(['database.connections' => Arr::except(config('database.connections'), $prefixedConnections)]);
     }
 
     /**

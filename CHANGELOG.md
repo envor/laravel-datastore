@@ -2,6 +2,14 @@
 
 All notable changes to `laravel-datastore` will be documented in this file.
 
+## v1.2.4 - 2024-02-21
+
+### What's Changed
+
+* cleanup on terminate and add schema and builder support by @inmanturbo in https://github.com/envor/laravel-datastore/pull/7
+
+**Full Changelog**: https://github.com/envor/laravel-datastore/compare/v1.2.3...v1.2.4
+
 ## v1.2.3 - 2024-02-20
 
 ### What's Changed

@@ -2,6 +2,7 @@
 
 namespace Envor\Datastore\Tests\Fixtures;
 
+use Envor\Datastore\Concerns\HasDatastores;
 use Envor\Datastore\Contracts\ConfiguresDatastore;
 use Envor\Datastore\Contracts\HasDatastoreContext;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -9,6 +10,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable implements HasDatastoreContext
 {
+    use HasDatastores;
     use HasFactory;
 
     protected $guarded = [];

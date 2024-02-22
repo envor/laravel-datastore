@@ -198,7 +198,7 @@ abstract class Datastore
         return $this;
     }
 
-    protected function callMigrateCommand(): string
+    protected function callMigrateCommand(): void
     {
         $options = [
             '--force' => true,
@@ -220,7 +220,7 @@ abstract class Datastore
 
         Artisan::call($command, $options, $this->buffer);
 
-        return Artisan::output();
+        $this->result = Artisan::output();
     }
 
     public function disconnect(): static
@@ -324,7 +324,7 @@ abstract class Datastore
     protected static function makeAdminConnection(string $name): string
     {
         if (static::faking()) {
-            return config('database.default');
+            config('database.connections.'.config('database.default'));
         }
 
         return 'datastore_admin_'.$name;
@@ -333,7 +333,7 @@ abstract class Datastore
     protected static function makeConnection(string $name): string
     {
         if (static::faking()) {
-            config('database.default');
+            config('database.connections.'.config('database.default'));
         }
 
         return $name;
@@ -342,9 +342,11 @@ abstract class Datastore
     protected static function makeNameIfNotFaking(string $name): string
     {
         if (static::faking()) {
-            $default = config('database.default');
+            if (str()->of($name)->contains(':memory:')) {
+                return ':memory:';
+            }
 
-            return config("database.connections.{$default}.database");
+            return config('database.connections.'.config('database.default').'.database');
         }
 
         return static::makeName($name);
