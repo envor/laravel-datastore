@@ -15,7 +15,7 @@ mount(
     function ($model) {
         $this->model = $model;
 
-        $this->state = [
+        $this->data = [
             'datastore_uuid' => $model->datastore->uuid,
         ];
     }
