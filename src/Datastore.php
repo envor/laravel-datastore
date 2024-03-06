@@ -162,7 +162,7 @@ abstract class Datastore
         return $this;
     }
 
-    public function return(?callable $callback): mixed
+    public function return(?callable $callback = null): mixed
     {
         return isset($callback) ? $callback($this->result) : $this->result;
     }
