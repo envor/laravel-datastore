@@ -2,6 +2,14 @@
 
 All notable changes to `laravel-datastore` will be documented in this file.
 
+## v1.2.6 - 2024-02-22
+
+### What's Changed
+
+* bug fix by @inmanturbo in https://github.com/envor/laravel-datastore/pull/9
+
+**Full Changelog**: https://github.com/envor/laravel-datastore/compare/v1.2.5...v1.2.6
+
 ## v1.2.5 - 2024-02-22
 
 ### What's Changed

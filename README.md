@@ -150,7 +150,7 @@ Route::get('/contexed', fn() => 'OK')->middleware(\Envor\Datastore\DatastoreCont
 
 ```
 
-Your user must implement the `HasDatastoreContext interface in order for this to work.
+Your user must implement the `HasDatastoreContext` interface in order for this to work.
 
 ```php
 ...
