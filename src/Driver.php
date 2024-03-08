@@ -14,7 +14,7 @@ enum Driver: string
     public function toNewDatabase($name): Datastore
     {
         $disk = config()->has('filesystems.disks.datastores') ? 'datastores' : 'local';
-        
+
         return DatabaseFactory::newDatabase($name, $this->value, $disk);
     }
 }
