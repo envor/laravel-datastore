@@ -36,7 +36,7 @@ trait BelongsToDatastore
             $attributes['owner_id'] = $this->user_id;
         }
 
-        if(isset($this->migration_path)) {
+        if (isset($this->migration_path)) {
             $attributes['migration_path'] = $this->migration_path;
         }
 
