@@ -62,7 +62,7 @@ trait HasDatastoreDriver
     {
         $database = $this->driver->toNewDatabase($this->name);
 
-        if ($this->migration_path) {
+        if (isset($this->migration_path)) {
             $database->migratePath($this->migration_path);
         }
 
