@@ -2,6 +2,15 @@
 
 All notable changes to `laravel-datastore` will be documented in this file.
 
+## v1.2.9 - 2024-03-11
+
+### What's Changed
+
+* configurable disk by @inmanturbo in https://github.com/envor/laravel-datastore/pull/12
+* use migration path if one is set on datastore model by @inmanturbo in https://github.com/envor/laravel-datastore/pull/13
+
+**Full Changelog**: https://github.com/envor/laravel-datastore/compare/v1.2.7...v1.2.9
+
 ## v1.2.8 - 2024-03-08
 
 ### What's Changed
