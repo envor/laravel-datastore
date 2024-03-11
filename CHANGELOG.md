@@ -2,6 +2,18 @@
 
 All notable changes to `laravel-datastore` will be documented in this file.
 
+## v1.2.8 - 2024-03-08
+
+### What's Changed
+
+* Bump ramsey/composer-install from 2 to 3 by @dependabot in https://github.com/envor/laravel-datastore/pull/10
+
+### New Contributors
+
+* @dependabot made their first contribution in https://github.com/envor/laravel-datastore/pull/10
+
+**Full Changelog**: https://github.com/envor/laravel-datastore/compare/v1.0.2...v1.2.8
+
 ## v1.2.7 - 2024-03-06
 
 ### What's Changed

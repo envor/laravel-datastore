@@ -19,7 +19,6 @@ trait HasDatastoreDriver
         static::creating(function (self $model) {
             if (! $model->driver) {
                 $model->driver = $model::DEFAULT_DRIVER;
-                // $model->save();
             }
             $model->createDatabase()->migrate();
         });
@@ -61,6 +60,12 @@ trait HasDatastoreDriver
 
     public function database(): ?Datastore
     {
-        return $this->driver->toNewDatabase($this->name);
+        $database = $this->driver->toNewDatabase($this->name);
+
+        if (isset($this->migration_path)) {
+            $database->migratePath($this->migration_path);
+        }
+
+        return $database;
     }
 }
