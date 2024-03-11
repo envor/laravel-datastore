@@ -68,4 +68,5 @@ trait HasDatastoreDriver
         }
 
         return $database;
+    }
 }
