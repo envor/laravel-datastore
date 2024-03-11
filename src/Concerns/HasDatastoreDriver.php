@@ -61,6 +61,11 @@ trait HasDatastoreDriver
 
     public function database(): ?Datastore
     {
-        return $this->driver->toNewDatabase($this->name);
-    }
+        $database = $this->driver->toNewDatabase($this->name);
+
+        if ($this->migration_path) {
+            $database->migratePath($this->migration_path);
+        }
+
+        return $database;
 }
