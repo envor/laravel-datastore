@@ -131,11 +131,6 @@ parameters:
 			path: tests/Fixtures/Team.php
 
 		-
-			message: "#^Access to an undefined property Envor\\\\Datastore\\\\Tests\\\\Fixtures\\\\Team\\:\\:\\$user_id\\.$#"
-			count: 1
-			path: tests/Fixtures/Team.php
-
-		-
 			message: "#^Access to an undefined property Envor\\\\Datastore\\\\Tests\\\\Fixtures\\\\User\\:\\:\\$currentTeam\\.$#"
 			count: 1
 			path: tests/Fixtures/User.php
