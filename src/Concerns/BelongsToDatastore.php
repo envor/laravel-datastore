@@ -10,6 +10,8 @@ trait BelongsToDatastore
 {
     public ?string $datastore_driver = null;
 
+    public ?string $migration_path = null;
+
     public static function bootBelongsToDatastore()
     {
         static::creating(function ($model) {
@@ -29,9 +31,13 @@ trait BelongsToDatastore
             'driver' => $this->datastore_driver ?? $model::DEFAULT_DRIVER,
         ];
 
-        if ($this->user_id) {
+        if (isset($this->user_id)) {
             $attributes['owner_type'] = $auth;
             $attributes['owner_id'] = $this->user_id;
+        }
+
+        if (isset($this->migration_path)) {
+            $attributes['migration_path'] = $this->migration_path;
         }
 
         return $model::create($attributes);
