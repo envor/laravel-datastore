@@ -22,4 +22,9 @@ class Datastore extends Model implements ConfiguresDatastore
     protected $casts = [
         'driver' => Driver::class,
     ];
+
+    public function owner()
+    {
+        return $this->morphTo();
+    }
 }
