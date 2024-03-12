@@ -2,6 +2,14 @@
 
 All notable changes to `laravel-datastore` will be documented in this file.
 
+## v1.2.10 - 2024-03-11
+
+### What's Changed
+
+* migrate path by @inmanturbo in https://github.com/envor/laravel-datastore/pull/14
+
+**Full Changelog**: https://github.com/envor/laravel-datastore/compare/v1.2.9...v1.2.10
+
 ## v1.2.9 - 2024-03-11
 
 ### What's Changed
