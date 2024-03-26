@@ -9,11 +9,6 @@ trait HasDatastoreDriver
 {
     public const DEFAULT_DRIVER = Driver::SQLite;
 
-    public function owner()
-    {
-        return $this->morphTo();
-    }
-
     protected static function bootHasDatastoreDriver()
     {
         static::creating(function (self $model) {

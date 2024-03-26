@@ -323,19 +323,11 @@ abstract class Datastore
 
     protected static function makeAdminConnection(string $name): string
     {
-        if (static::faking()) {
-            config('database.connections.'.config('database.default'));
-        }
-
         return 'datastore_admin_'.$name;
     }
 
     protected static function makeConnection(string $name): string
     {
-        if (static::faking()) {
-            config('database.connections.'.config('database.default'));
-        }
-
         return $name;
     }
 
