@@ -2,6 +2,15 @@
 
 All notable changes to `laravel-datastore` will be documented in this file.
 
+## v1.2.11 - 2024-03-26
+
+### What's Changed
+
+* Bump dependabot/fetch-metadata from 1.6.0 to 2.0.0 by @dependabot in https://github.com/envor/laravel-datastore/pull/15
+* dont take over volt cli by @inmanturbo in https://github.com/envor/laravel-datastore/pull/16
+
+**Full Changelog**: https://github.com/envor/laravel-datastore/compare/v1.2.10...v1.2.11
+
 ## v1.2.10 - 2024-03-11
 
 ### What's Changed

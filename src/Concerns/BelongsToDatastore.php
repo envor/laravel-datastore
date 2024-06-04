@@ -21,6 +21,11 @@ trait BelongsToDatastore
         });
     }
 
+    public function getDatastoreDriver(): ?string
+    {
+        return $this->datastore_driver;
+    }
+
     protected function createDatastore(): Model
     {
         $model = config('datastore.model');
@@ -28,7 +33,7 @@ trait BelongsToDatastore
 
         $attributes = [
             'name' => (string) str()->of($this->name)->slug('_'),
-            'driver' => $this->datastore_driver ?? $model::DEFAULT_DRIVER,
+            'driver' => $this->getDatastoreDriver() ?? $model::DEFAULT_DRIVER,
         ];
 
         if (isset($this->user_id)) {
