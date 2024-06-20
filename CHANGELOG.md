@@ -2,6 +2,14 @@
 
 All notable changes to `laravel-datastore` will be documented in this file.
 
+## v1.2.14 - 2024-06-20
+
+### What's Changed
+
+* allow fallback to 'datastore_context' key in container by @inmanturbo in https://github.com/envor/laravel-datastore/pull/20
+
+**Full Changelog**: https://github.com/envor/laravel-datastore/compare/v1.2.12...v1.2.14
+
 ## v1.2.12 - 2024-06-04
 
 ### What's Changed
