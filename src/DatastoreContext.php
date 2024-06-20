@@ -13,7 +13,7 @@ class DatastoreContext implements Contracts\HasDatastoreContext
         }
 
         if ($auth && method_exists($auth, 'datastoreContext')) {
-           return $auth->datastoreContext();
+            return $auth->datastoreContext();
         }
 
         if (isset(app()['datastore_context'])) {
