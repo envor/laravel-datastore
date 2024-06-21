@@ -24,6 +24,8 @@ trait HasDatastoreDriver
         app()->forgetInstance('datastore');
 
         app()->instance('datastore', $this);
+
+        return $this;
     }
 
     public function createDatabase()
