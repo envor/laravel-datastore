@@ -45,7 +45,8 @@ trait HasDatastoreDriver
     {
         $this->database()->configure();
 
-        parent::clearBootedModels();
+        // dont do this yet
+        // parent::clearBootedModels();
 
         return $this;
     }
