@@ -2,6 +2,14 @@
 
 All notable changes to `laravel-datastore` will be documented in this file.
 
+## v1.2.16 - 2024-07-01
+
+### What's Changed
+
+* do not clear booted models (yet) by @inmanturbo in https://github.com/envor/laravel-datastore/pull/23
+
+**Full Changelog**: https://github.com/envor/laravel-datastore/compare/v1.2.15...v1.2.16
+
 ## v1.2.15 - 2024-06-24
 
 ### What's Changed
