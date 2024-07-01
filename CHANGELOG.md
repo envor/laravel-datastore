@@ -2,6 +2,15 @@
 
 All notable changes to `laravel-datastore` will be documented in this file.
 
+## v1.2.15 - 2024-06-24
+
+### What's Changed
+
+* return $this from use() for more fluent api by @inmanturbo in https://github.com/envor/laravel-datastore/pull/21
+* clear booted models after configuring datastore by @inmanturbo in https://github.com/envor/laravel-datastore/pull/22
+
+**Full Changelog**: https://github.com/envor/laravel-datastore/compare/v1.2.14...v1.2.15
+
 ## v1.2.14 - 2024-06-20
 
 ### What's Changed
