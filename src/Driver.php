@@ -7,6 +7,7 @@ enum Driver: string
     case SQLite = 'sqlite';
     case MariaDB = 'mariadb';
     case MySQL = 'mysql';
+    case PgSql = 'pgsql';
 
     /**
      * Create a new database instance with the given name.

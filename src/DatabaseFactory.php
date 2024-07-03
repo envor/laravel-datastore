@@ -26,6 +26,7 @@ class DatabaseFactory
             'sqlite' => static::prefixedSqlite($name, $disk),
             'mariadb' => Databases\MariaDB::withPrefix($name, 'datastore'),
             'mysql' => Databases\MySql::withPrefix($name, 'datastore'),
+            'pgsql' => Databases\PgSql::withPrefix($name, 'datastore'),
             default => throw new \Exception("Driver {$driver} not supported"),
         };
     }
