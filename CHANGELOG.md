@@ -2,6 +2,14 @@
 
 All notable changes to `laravel-datastore` will be documented in this file.
 
+## v1.2.17 - 2024-07-03
+
+### What's Changed
+
+* add pgsql by @inmanturbo in https://github.com/envor/laravel-datastore/pull/24
+
+**Full Changelog**: https://github.com/envor/laravel-datastore/compare/v1.2.16...v1.2.17
+
 ## v1.2.16 - 2024-07-01
 
 ### What's Changed
