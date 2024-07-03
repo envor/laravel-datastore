@@ -37,17 +37,11 @@ class DatastoreServiceProvider extends PackageServiceProvider
             $router->pushMiddlewareToGroup('web', DatastoreContextMiddleware::class);
             $router->aliasMiddleware('datastore.context', DatastoreContextMiddleware::class);
 
-            if (class_exists('\Livewire\Volt\Volt')) {
-
-                $voltPaths = collect(\Livewire\Volt\Volt::paths())->map(function ($path) {
-                    return $path->path;
-                })->toArray();
-
-                $paths = array_merge($voltPaths, [
+            if (class_exists('\Livewire\Volt\Volt') && (! $this->app->runningInConsole() || $this->app->runningUnitTests())) {
+                $paths = [
                     __DIR__.'/../resources/views/livewire',
                     __DIR__.'/../resources/views/pages',
-                ]);
-
+                ];
                 \Livewire\Volt\Volt::mount($paths);
             }
         });

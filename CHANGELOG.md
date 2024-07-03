@@ -2,6 +2,50 @@
 
 All notable changes to `laravel-datastore` will be documented in this file.
 
+## v1.2.16 - 2024-07-01
+
+### What's Changed
+
+* do not clear booted models (yet) by @inmanturbo in https://github.com/envor/laravel-datastore/pull/23
+
+**Full Changelog**: https://github.com/envor/laravel-datastore/compare/v1.2.15...v1.2.16
+
+## v1.2.15 - 2024-06-24
+
+### What's Changed
+
+* return $this from use() for more fluent api by @inmanturbo in https://github.com/envor/laravel-datastore/pull/21
+* clear booted models after configuring datastore by @inmanturbo in https://github.com/envor/laravel-datastore/pull/22
+
+**Full Changelog**: https://github.com/envor/laravel-datastore/compare/v1.2.14...v1.2.15
+
+## v1.2.14 - 2024-06-20
+
+### What's Changed
+
+* allow fallback to 'datastore_context' key in container by @inmanturbo in https://github.com/envor/laravel-datastore/pull/20
+
+**Full Changelog**: https://github.com/envor/laravel-datastore/compare/v1.2.12...v1.2.14
+
+## v1.2.12 - 2024-06-04
+
+### What's Changed
+
+* Bump aglipanci/laravel-pint-action from 2.3.1 to 2.4 by @dependabot in https://github.com/envor/laravel-datastore/pull/17
+* Bump dependabot/fetch-metadata from 2.0.0 to 2.1.0 by @dependabot in https://github.com/envor/laravel-datastore/pull/18
+* datastore driver getter by @inmanturbo in https://github.com/envor/laravel-datastore/pull/19
+
+**Full Changelog**: https://github.com/envor/laravel-datastore/compare/v1.2.11...v1.2.12
+
+## v1.2.11 - 2024-03-26
+
+### What's Changed
+
+* Bump dependabot/fetch-metadata from 1.6.0 to 2.0.0 by @dependabot in https://github.com/envor/laravel-datastore/pull/15
+* dont take over volt cli by @inmanturbo in https://github.com/envor/laravel-datastore/pull/16
+
+**Full Changelog**: https://github.com/envor/laravel-datastore/compare/v1.2.10...v1.2.11
+
 ## v1.2.10 - 2024-03-11
 
 ### What's Changed

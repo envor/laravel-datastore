@@ -24,6 +24,8 @@ trait HasDatastoreDriver
         app()->forgetInstance('datastore');
 
         app()->instance('datastore', $this);
+
+        return $this;
     }
 
     public function createDatabase()
@@ -42,6 +44,9 @@ trait HasDatastoreDriver
     public function configure()
     {
         $this->database()->configure();
+
+        // dont do this yet
+        // parent::clearBootedModels();
 
         return $this;
     }
