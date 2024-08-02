@@ -39,7 +39,7 @@ trait HasDatastoreDriver
         if (count(explode('_1', $this->name)) > 10) {
             throw new \Exception('Database name is too long');
         }
-        
+
         if ($this->database()->exists()) {
             $this->name = $this->name.'_1';
 

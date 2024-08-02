@@ -49,7 +49,7 @@ test('the middleware in isolation', function () {
 
     $this->actingAs($user);
 
-    $middleware = new \Envor\Datastore\DatastoreContextMiddleware();
+    $middleware = new \Envor\Datastore\DatastoreContextMiddleware;
 
     $response = $middleware->handle(
         createRequest('GET', '/'),
