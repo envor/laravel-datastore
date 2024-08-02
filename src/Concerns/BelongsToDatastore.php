@@ -28,8 +28,9 @@ trait BelongsToDatastore
 
     public function generateDatastoreName(): string
     {
-        if(isset($this->name) && isset($this->uuid)) {
+        if (isset($this->name) && isset($this->uuid)) {
             $uuid = substr($this->uuid, -4);
+
             return (string) str()->of($this->name)->slug('_')->finish('_'.$uuid)->lower();
         }
 
