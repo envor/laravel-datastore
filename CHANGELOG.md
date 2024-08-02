@@ -2,6 +2,15 @@
 
 All notable changes to `laravel-datastore` will be documented in this file.
 
+## v1.2.18 - 2024-08-02
+
+### What's Changed
+
+* Bump dependabot/fetch-metadata from 2.1.0 to 2.2.0 by @dependabot in https://github.com/envor/laravel-datastore/pull/25
+* Limit recursion with a couple assertions by @inmanturbo in https://github.com/envor/laravel-datastore/pull/26
+
+**Full Changelog**: https://github.com/envor/laravel-datastore/compare/v1.2.17...v1.2.18
+
 ## v1.2.17 - 2024-07-03
 
 ### What's Changed
