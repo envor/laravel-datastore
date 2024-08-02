@@ -26,13 +26,24 @@ trait BelongsToDatastore
         return $this->datastore_driver;
     }
 
+    public function generateDatastoreName(): string
+    {
+        if (isset($this->name) && isset($this->uuid)) {
+            $uuid = substr($this->uuid, -4);
+
+            return (string) str()->of($this->name)->slug('_')->finish('_'.$uuid)->lower();
+        }
+
+        return (string) str()->ulid();
+    }
+
     protected function createDatastore(): Model
     {
         $model = config('datastore.model');
         $auth = config('auth.providers.users.model');
 
         $attributes = [
-            'name' => (string) str()->of($this->name)->slug('_'),
+            'name' => $this->generateDatastoreName(),
             'driver' => $this->getDatastoreDriver() ?? $model::DEFAULT_DRIVER,
         ];
 
