@@ -30,6 +30,16 @@ trait HasDatastoreDriver
 
     public function createDatabase()
     {
+        $defaultConnection = config('database.default');
+
+        if (app()->has('datastore_faking') || $this->name === config("database.connections.{$defaultConnection}.database")) {
+            return $this;
+        }
+
+        if (count(explode('_1', $this->name)) > 10) {
+            throw new \Exception('Database name is too long');
+        }
+
         if ($this->database()->exists()) {
             $this->name = $this->name.'_1';
 
