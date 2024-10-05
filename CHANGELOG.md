@@ -2,6 +2,18 @@
 
 All notable changes to `laravel-datastore` will be documented in this file.
 
+## v2.0.0 - 2024-10-05
+
+### What's Changed
+
+* Bump dependabot/fetch-metadata from 1.6.0 to 2.0.0 by @dependabot in https://github.com/envor/laravel-datastore/pull/15
+* Bump aglipanci/laravel-pint-action from 2.3.1 to 2.4 by @dependabot in https://github.com/envor/laravel-datastore/pull/17
+* Bump dependabot/fetch-metadata from 2.0.0 to 2.1.0 by @dependabot in https://github.com/envor/laravel-datastore/pull/18
+* Bump dependabot/fetch-metadata from 2.1.0 to 2.2.0 by @dependabot in https://github.com/envor/laravel-datastore/pull/25
+* main by @inmanturbo in https://github.com/envor/laravel-datastore/pull/28
+
+**Full Changelog**: https://github.com/envor/laravel-datastore/compare/v1.2.8...v2.0.0
+
 ## v1.2.19 - 2024-08-02
 
 ### What's Changed

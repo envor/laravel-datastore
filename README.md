@@ -7,6 +7,22 @@
 
 A simple strategy for handling dynamic databases of varying types
 
+## Upgrade Guide
+Upgrading from 1.x to 2.x.
+
+2x does not push middleware by default, or configure context by default. To continue using as before add the following to your project's .env file:
+
+```ini
+DATASTORE_PUSH_CONTEXT_MIDDLEWARE=true
+AUTOCONFIGURE_DEFAULT_CONTEXT=true
+```
+
+2x does not require `envor/platform` by default, Next you will need to manually require `envor/platform`
+
+```bash
+composer require envor/platform
+```
+
 ## Installation
 
 You can install the package via composer:
@@ -34,6 +50,8 @@ This is the contents of the published config file:
 return [
     'model' => \Envor\Datastore\Models\Datastore::class,
     'create_databases' => env('DATASTORE_CREATE_DATABASES', true),
+    'push_middleware' => env('DATASTORE_PUSH_CONTEXT_MIDDLEWARE', false),
+    'autoconfigure_default_context' => env('AUTOCONFIGURE_DEFAULT_CONTEXT', false),
 ];
 ```
 
