@@ -7,6 +7,16 @@
 
 A simple strategy for handling dynamic databases of varying types
 
+## Upgrade Guide
+Upgrading from 1.x to 2.x.
+
+2x does not push middleware by default, or configure context by default. To continue using as before add the folowing to your project's .env file:
+
+```ini
+DATASTORE_PUSH_CONTEXT_MIDDLEWARE=true
+AUTOCONFIGURE_DEFAULT_CONTEXT=true
+```
+
 ## Installation
 
 You can install the package via composer:
