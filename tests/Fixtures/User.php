@@ -27,7 +27,6 @@ class User extends Authenticatable implements HasDatastoreContext
      */
     public function currentTeam()
     {
-
         return $this->belongsTo(Team::class, 'current_team_id');
     }
 }
