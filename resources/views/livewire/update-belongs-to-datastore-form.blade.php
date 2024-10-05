@@ -12,7 +12,7 @@ state([
 ]);
 
 mount(
-    function ($model) {
+    function ($model): void {
         $this->model = $model;
 
         $this->data = [
@@ -25,7 +25,7 @@ $user = computed(fn() => Auth::user());
 
 $datastores = computed(fn() => $this->model->owner->datastores);
 
-$updateModelDatastore = function () {
+$updateModelDatastore = function (): void {
 
     $this->resetErrorBag();
 

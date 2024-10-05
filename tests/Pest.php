@@ -16,7 +16,7 @@ function createRequest($method, $uri): \Illuminate\Http\Request
 
 function teamsAndUsersSchema()
 {
-    Schema::connection(config('database.platform'))->create('users', function (Blueprint $table) {
+    Schema::connection(config('database.platform'))->create('users', function (Blueprint $table): void {
         $table->id();
         $table->string('name');
         $table->string('email')->unique();
@@ -28,7 +28,7 @@ function teamsAndUsersSchema()
         $table->timestamps();
     });
 
-    Schema::connection(config('database.platform'))->create('teams', function (Blueprint $table) {
+    Schema::connection(config('database.platform'))->create('teams', function (Blueprint $table): void {
         $table->id();
         $table->string('name');
         $table->foreignId('datastore_id')->index()->nullable();

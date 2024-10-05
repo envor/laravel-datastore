@@ -14,7 +14,7 @@ trait BelongsToDatastore
 
     public static function bootBelongsToDatastore()
     {
-        static::creating(function ($model) {
+        static::creating(function ($model): void {
             if (! $model->datastore_id) {
                 $model->datastore_id = $model->createDatastore()->id;
             }

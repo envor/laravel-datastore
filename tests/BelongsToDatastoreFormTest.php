@@ -4,7 +4,7 @@ use Envor\Datastore\Datastore;
 use Envor\Datastore\Tests\Fixtures\User;
 use Livewire\Volt\Volt;
 
-beforeEach(function () {
+beforeEach(function (): void {
 
     teamsAndUsersSchema();
 
@@ -26,7 +26,7 @@ beforeEach(function () {
     $this->actingAs($user);
 });
 
-it('can update a models datastore', function () {
+it('can update a models datastore', function (): void {
     $this->team->update([
         'datastore_id' => $this->datastore->id,
     ]);
@@ -34,7 +34,7 @@ it('can update a models datastore', function () {
     expect($this->team->datastore->id)->toBe($this->datastore->id);
 });
 
-it('can update a models datastore using livewire volt', function () {
+it('can update a models datastore using livewire volt', function (): void {
 
     Datastore::fake();
 

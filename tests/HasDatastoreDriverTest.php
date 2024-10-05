@@ -3,7 +3,7 @@
 use Envor\Datastore\Models\Datastore;
 use Illuminate\Support\Facades\Schema;
 
-it('will configure the datastore', function () {
+it('will configure the datastore', function (): void {
     /** @var Datastore $datastoreModel */
     $datastoreModel = config('datastore.model');
 
@@ -16,7 +16,7 @@ it('will configure the datastore', function () {
     expect(config("database.connections.{$datastore->database()->name}"))->toBe($datastore->database()->config);
 });
 
-it('will create and migrate the datastore', function () {
+it('will create and migrate the datastore', function (): void {
     /** @var Datastore $datastoreModel */
     $datastoreModel = config('datastore.model');
 

@@ -7,7 +7,7 @@ use Envor\Datastore\Models\Datastore as DatastoreModel;
 use Envor\Datastore\Tests\Fixtures\Team;
 use Envor\Datastore\Tests\Fixtures\User;
 
-beforeEach(function () {
+beforeEach(function (): void {
     Datastore::configureDatastoreContextUsing(DatastoreContext::class);
 
     teamsAndUsersSchema();
@@ -26,7 +26,7 @@ beforeEach(function () {
     $this->datastore = $datastore;
 });
 
-it('can configure a datastore using context', function () {
+it('can configure a datastore using context', function (): void {
     $user = User::factory()->create([
         'current_team_id' => $this->team->id,
     ]);
@@ -42,7 +42,7 @@ it('can configure a datastore using context', function () {
     expect(config("database.connections.{$this->datastore->database()->name}"))->toBe($this->datastore->database()->config);
 });
 
-test('the middleware in isolation', function () {
+test('the middleware in isolation', function (): void {
     $user = User::factory()->create([
         'current_team_id' => $this->team->id,
     ]);
@@ -59,7 +59,7 @@ test('the middleware in isolation', function () {
     expect(config('database.default'))->toBe($this->datastore->database()->name);
 });
 
-test('the middleware in full app', function () {
+test('the middleware in full app', function (): void {
 
     $this->withoutExceptionHandling();
 

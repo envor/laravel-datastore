@@ -33,7 +33,7 @@ class DatastoreServiceProvider extends PackageServiceProvider
             Datastore::configureDatastoreContextUsing(DatastoreContext::class);
         }
 
-        $this->app->booted(function () {
+        $this->app->booted(function (): void {
             /** @var Router $router */
             $router = $this->app['router'];
             if (config('datastore.push_middleware', false)) {

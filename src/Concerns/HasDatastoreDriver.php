@@ -11,7 +11,7 @@ trait HasDatastoreDriver
 
     protected static function bootHasDatastoreDriver()
     {
-        static::creating(function (self $model) {
+        static::creating(function (self $model): void {
             if (! $model->driver) {
                 $model->driver = $model::DEFAULT_DRIVER;
             }
