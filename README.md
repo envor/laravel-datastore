@@ -17,6 +17,12 @@ DATASTORE_PUSH_CONTEXT_MIDDLEWARE=true
 AUTOCONFIGURE_DEFAULT_CONTEXT=true
 ```
 
+2x does not require `envor/platform` by default, Next you will need to manually require `envor/platform`
+
+```bash
+composer require envor/platform
+```
+
 ## Installation
 
 You can install the package via composer:
