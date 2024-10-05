@@ -29,12 +29,16 @@ class DatastoreServiceProvider extends PackageServiceProvider
     {
         $this->app->terminating(fn () => DatabaseFactory::cleanupRepository());
 
-        Datastore::configureDatastoreContextUsing(DatastoreContext::class);
+        if (config('datastore.autoconfigure_default_context', false)) {
+            Datastore::configureDatastoreContextUsing(DatastoreContext::class);
+        }
 
         $this->app->booted(function () {
             /** @var Router $router */
             $router = $this->app['router'];
-            $router->pushMiddlewareToGroup('web', DatastoreContextMiddleware::class);
+            if (config('datastore.push_middleware', false)) {
+                $router->pushMiddlewareToGroup('web', DatastoreContextMiddleware::class);
+            }
             $router->aliasMiddleware('datastore.context', DatastoreContextMiddleware::class);
 
             if (class_exists('\Livewire\Volt\Volt') && (! $this->app->runningInConsole() || $this->app->runningUnitTests())) {
