@@ -141,6 +141,15 @@ abstract class Datastore
             "database.connections.{$previous['key']}" => $previous['config'],
             'database.default' => $previous['key'],
         ]);
+
+        app('db')->extend($previous['key'], function ($config, $name) use ($previous) {
+            return app('db.factory')->make($previous['config'], $name);
+        });
+
+        DB::purge($previous['key']);
+
+        // Octane will have an old `db` instance in the Model::$resolver.
+        Model::setConnectionResolver(app('db'));
     }
 
     protected function pushConfig(): void
@@ -151,6 +160,15 @@ abstract class Datastore
             "database.connections.{$this->connection}" => $this->config,
             'database.default' => $this->connection,
         ]);
+
+        app('db')->extend($this->connection, function ($config, $name) {
+            return app('db.factory')->make($this->config, $name);
+        });
+
+        DB::purge($this->connection);
+
+        // Octane will have an old `db` instance in the Model::$resolver.
+        Model::setConnectionResolver(app('db'));
     }
 
     public function run(?callable $callback): mixed
