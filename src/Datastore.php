@@ -6,6 +6,7 @@ use Envor\Datastore\Contracts\ConfiguresDatastore;
 use Envor\Datastore\Contracts\HasDatastoreContext;
 use Illuminate\Database\Connection;
 use Illuminate\Database\DatabaseManager;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Schema\Builder;
 use Illuminate\Support\Arr;
